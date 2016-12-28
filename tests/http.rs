@@ -62,7 +62,7 @@ fn parse_http_request_success_methods() {
     let methods = ["GET", "POST", "HEAD", "PUT", "DELETE", "TRACE", "OPTIONS", "CONNECT", "PATCH"];
 
     for method in &methods {
-        let mut input = Vec::from(method.clone());
+        let mut input = Vec::from(*method);
         input.extend_from_slice(header.as_bytes());
         parser.parse(&input, None, None, None).unwrap();
     }

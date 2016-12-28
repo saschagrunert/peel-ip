@@ -50,7 +50,7 @@ fn parse_tcp_failure_too_small() {
 #[test]
 fn parse_tcp_failure_wrong_result() {
     let parser = TcpParser;
-    let res = parser.parse(&TCP_HEADER, None, None, Some(&vec![]));
+    let res = parser.parse(TCP_HEADER, None, None, Some(&vec![]));
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::ExprOpt, &TCP_HEADER[..])));
 }
