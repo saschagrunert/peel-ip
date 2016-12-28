@@ -1,0 +1,17 @@
+[package]
+name = "peel-ip"
+version = "0.0.1"
+license = "MIT"
+readme = "README.md"
+keywords = ["packets", "ip", "tree", "parser", "tcp"]
+authors = ["Sascha Grunert <mail@saschagrunert.de>"]
+repository = "https://github.com/saschagrunert/peel-ip"
+homepage = "https://github.com/saschagrunert/peel-ip"
+documentation = "https://docs.rs/peel-ip"
+description = "Packet parsing for the Internet Protocol Suite"
+
+[dependencies]
+log = "0"
+mowl = "1"
+nom = {version = "2", features = ["verbose-errors"]}
+peel = {path = "../peel"}
