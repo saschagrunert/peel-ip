@@ -13,11 +13,7 @@
 
 #[macro_use]
 extern crate nom;
-
-#[macro_use]
-extern crate log;
 extern crate peel;
-extern crate path;
 
 #[macro_use]
 pub mod memcmp;
@@ -34,7 +30,7 @@ pub mod prelude {
     pub use std::fmt;
     pub use std::str::{FromStr, self};
     pub use std::net::{Ipv4Addr, Ipv6Addr};
-    pub use nom::{IResult, be_i8, be_u8, be_u16, be_u32, be_u64, digit};
+    pub use nom::*;
     pub use peel::prelude::*;
 
     pub use super::{Layer, ParserVariant, PeelIp};
