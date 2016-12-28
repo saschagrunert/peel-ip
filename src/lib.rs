@@ -1,6 +1,6 @@
 //! # Packet parsing for the Internet Protocol Suite
 //!
-//! # Example usage
+//! ## Example usage
 //! ```
 //! use peel_ip::PeelIp;
 //!
@@ -12,13 +12,11 @@
 #![deny(missing_docs)]
 
 #[macro_use]
-extern crate peel;
-
-#[macro_use]
 extern crate nom;
 
 #[macro_use]
 extern crate log;
+extern crate peel;
 extern crate path;
 
 #[macro_use]
@@ -36,7 +34,7 @@ pub mod prelude {
     pub use std::fmt;
     pub use std::str::{FromStr, self};
     pub use std::net::{Ipv4Addr, Ipv6Addr};
-    pub use nom::*;
+    pub use nom::{IResult, be_i8, be_u8, be_u16, be_u32, be_u64, digit};
     pub use peel::prelude::*;
 
     pub use super::{Layer, ParserVariant, PeelIp};
