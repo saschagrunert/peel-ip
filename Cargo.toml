@@ -1,6 +1,6 @@
 [package]
 name = "peel-ip"
-version = "0.0.1"
+version = "0.1.0"
 license = "MIT"
 readme = "README.md"
 keywords = ["packets", "ip", "tree", "parser", "tcp"]
@@ -12,6 +12,6 @@ description = "Packet parsing for the Internet Protocol Suite"
 
 [dependencies]
 log = "0"
-mowl = "1"
 nom = {version = "2", features = ["verbose-errors"]}
 peel = "0"
+path = "0"

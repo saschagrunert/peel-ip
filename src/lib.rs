@@ -1,4 +1,14 @@
-//! Example parsers for the dynamic data structure
+//! # Packet parsing for the Internet Protocol Suite
+//!
+//! # Example usage
+//! ```
+//! use peel_ip::PeelIp;
+//!
+//! let mut peel = PeelIp::new();
+//! let mut input = vec![0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00];
+//! let result = peel.traverse(&input, vec![]).unwrap();
+//! assert_eq!(result.len(), 1);
+//! ```
 #![deny(missing_docs)]
 
 #[macro_use]
@@ -9,7 +19,7 @@ extern crate nom;
 
 #[macro_use]
 extern crate log;
-extern crate mowl;
+extern crate path;
 
 #[macro_use]
 pub mod memcmp;
