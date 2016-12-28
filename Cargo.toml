@@ -14,4 +14,4 @@ description = "Packet parsing for the Internet Protocol Suite"
 log = "0"
 mowl = "1"
 nom = {version = "2", features = ["verbose-errors"]}
-peel = "*"
+peel = "0"

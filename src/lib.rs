@@ -38,23 +38,23 @@ pub mod prelude {
     pub type PacketArena = ParserArena<Layer, ParserVariant>;
 
     /// Link
-    pub use super::layer1::*;
-    pub use super::layer1::ethernet::*;
+    pub use layer1::*;
+    pub use layer1::ethernet::*;
 
     /// Internet
-    pub use super::layer2::*;
-    pub use super::layer2::ipv4::*;
-    pub use super::layer2::ipv6::*;
+    pub use layer2::*;
+    pub use layer2::ipv4::*;
+    pub use layer2::ipv6::*;
 
     // Transport
-    pub use super::layer3::*;
-    pub use super::layer3::tcp::*;
-    pub use super::layer3::tls::*;
-    pub use super::layer3::udp::*;
+    pub use layer3::*;
+    pub use layer3::tcp::*;
+    pub use layer3::tls::*;
+    pub use layer3::udp::*;
 
     // Application
-    pub use super::layer4::http::*;
-    pub use super::layer4::ntp::*;
+    pub use layer4::http::*;
+    pub use layer4::ntp::*;
 }
 
 #[derive(Debug)]
