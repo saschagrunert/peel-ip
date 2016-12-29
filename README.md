@@ -10,10 +10,9 @@ This means in detail, that beside the usual protocol stack (like: `[Ethernet, IP
 are supported as well (like `[Ethernet, IPv4, IPv6, TCP, HTTP]`).
 
 ## Planned features:
-- Avoid cloning of Parsers like the `TcpParser`
 - Use the [Path](https://github.com/saschagrunert/path) crate to provide connection identification
 - Add support packet reassembly
-- Add more protocols
+- Add more protocols of the TCP/IP suite
 
 ## Contributing
 You want to contribute to this project? Wow, thanks! So please just fork it and send me a pull request.
