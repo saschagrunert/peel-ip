@@ -10,7 +10,6 @@ This means in detail, that beside the usual protocol stack (like: `[Ethernet, IP
 are supported as well (like `[Ethernet, IPv4, IPv6, TCP, HTTP]`).
 
 ## Planned features:
-- Use the [Path](https://github.com/saschagrunert/path) crate to provide connection identification
 - Add support packet reassembly
 - Add more protocols of the TCP/IP suite
 

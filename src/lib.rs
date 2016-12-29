@@ -14,6 +14,7 @@
 #[macro_use]
 extern crate nom;
 extern crate peel;
+extern crate path;
 
 #[macro_use]
 pub mod memcmp;
@@ -86,21 +87,6 @@ pub enum ParserVariant {
     Ntp(NtpParser),
 }
 
-impl fmt::Display for ParserVariant {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            ParserVariant::Ethernet(_) => write!(f, "Ethernet"),
-            ParserVariant::Ipv4(_) => write!(f, "IPv4"),
-            ParserVariant::Ipv6(_) => write!(f, "IPv6"),
-            ParserVariant::Tcp(_) => write!(f, "TCP"),
-            ParserVariant::Tls(_) => write!(f, "TLS"),
-            ParserVariant::Http(_) => write!(f, "HTTP"),
-            ParserVariant::Udp(_) => write!(f, "UDP"),
-            ParserVariant::Ntp(_) => write!(f, "NTP"),
-        }
-    }
-}
-
 #[derive(Debug, Eq, PartialEq)]
 /// Return values for the actual parsers
 pub enum Layer {
@@ -129,20 +115,27 @@ pub enum Layer {
     Ntp(NtpPacket),
 }
 
-impl fmt::Display for Layer {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match *self {
-            Layer::Ethernet(_) => write!(f, "Ethernet"),
-            Layer::Ipv4(_) => write!(f, "IPv4"),
-            Layer::Ipv6(_) => write!(f, "IPv6"),
-            Layer::Tcp(_) => write!(f, "TCP"),
-            Layer::Tls(_) => write!(f, "TLS"),
-            Layer::Http(_) => write!(f, "HTTP"),
-            Layer::Udp(_) => write!(f, "UDP"),
-            Layer::Ntp(_) => write!(f, "NTP"),
+macro_rules! impl_fmt_display {
+    ($name: ident) => {
+        impl fmt::Display for $name {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                match *self {
+                    $name::Ethernet(_) => write!(f, "Ethernet"),
+                    $name::Ipv4(_) => write!(f, "IPv4"),
+                    $name::Ipv6(_) => write!(f, "IPv6"),
+                    $name::Tcp(_) => write!(f, "TCP"),
+                    $name::Tls(_) => write!(f, "TLS"),
+                    $name::Http(_) => write!(f, "HTTP"),
+                    $name::Udp(_) => write!(f, "UDP"),
+                    $name::Ntp(_) => write!(f, "NTP"),
+                }
+            }
         }
     }
 }
+
+impl_fmt_display!(Layer);
+impl_fmt_display!(ParserVariant);
 
 /// Peel for TCP/IP packets
 pub struct PeelIp;
