@@ -4,8 +4,8 @@
 //! ```
 //! use peel_ip::PeelIp;
 //!
-//! let mut peel = PeelIp::new();
-//! let mut input = vec![0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00];
+//! let peel = PeelIp::new();
+//! let input = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0];
 //! let result = peel.traverse(&input, vec![]).unwrap();
 //! assert_eq!(result.len(), 1);
 //! ```
