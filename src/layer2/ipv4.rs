@@ -12,10 +12,10 @@ impl Parser for Ipv4Parser {
     /// Parse an `Ipv4Packet` from an `&[u8]`
     fn parse<'a>(&self,
                  input: &'a [u8],
-                 _: Option<&PacketNode>,
-                 _: Option<&PacketArena>,
+                 _: Option<&ParserNode>,
+                 _: Option<&ProtocolGraph>,
                  result: Option<&Vec<Self::Result>>)
-                 -> IResult<&'a [u8], (Self::Result, ParserState)> {
+                 -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
             expr_opt!(match result {
@@ -47,18 +47,6 @@ impl Parser for Ipv4Parser {
             src: map!(be_u32, Ipv4Addr::from) >>
             dst: map!(be_u32, Ipv4Addr::from) >>
 
-            // Adapt the control flow in case we have an `IPv6` as protocol number
-            state: expr_opt!(match protocol {
-                // This only works if the Ipv6Parser is located as a sibling of the Ipv4Parser
-                IpProtocol::Ipv6 => Some(ParserState::ContinueWithNextSibling),
-
-                // IP encapsulation within IP
-                IpProtocol::IpIp => Some(ParserState::ContinueWithCurrent),
-
-                // Just use the usual control flow
-                _ => Some(ParserState::ContinueWithFirstChild),
-            }) >>
-
             // Return the parsing result
             (Layer::Ipv4(Ipv4Packet {
                 version: ver_ihl.0,
@@ -73,7 +61,7 @@ impl Parser for Ipv4Parser {
                 checksum: checksum,
                 src: src,
                 dst: dst,
-            }), state)
+            }))
         )
     }
 

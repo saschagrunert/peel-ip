@@ -12,7 +12,7 @@ static NTP_HEADER: &'static [u8] =
 fn parse_ntp_success() {
     let parser = NtpParser;
     let res = parser.parse(NTP_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Ntp(NtpPacket {
                    li: 0,
                    version: 4,
@@ -29,7 +29,7 @@ fn parse_ntp_success() {
                    ts_xmit: 14710388140573593600,
                    auth: Some((1, NTP_HEADER[52..].to_vec())),
                }),
-               res.0);
+               res);
 }
 
 #[test]

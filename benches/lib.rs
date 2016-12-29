@@ -40,15 +40,3 @@ fn tree_parsing(bencher: &mut Bencher) {
     });
     bencher.bytes = PACKET_ETH_IPV4_TCP_TLS.len() as u64;
 }
-
-#[bench]
-fn tree_traverse(bencher: &mut Bencher) {
-    let peel = PeelIp::new();
-    bencher.iter(|| { for _ in peel.root.unwrap().traverse(&peel.arena) {} });
-}
-
-#[bench]
-fn tree_reverse_traverse(bencher: &mut Bencher) {
-    let peel = PeelIp::new();
-    bencher.iter(|| { for _ in peel.root.unwrap().reverse_traverse(&peel.arena) {} });
-}

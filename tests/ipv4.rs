@@ -15,7 +15,7 @@ fn ipv4_parser_variant() {
 fn parse_ipv4_success() {
     let parser = Ipv4Parser;
     let res = parser.parse(IPV4_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Ipv4(Ipv4Packet {
                    version: 4,
                    ihl: 20,
@@ -30,8 +30,7 @@ fn parse_ipv4_success() {
                    src: Ipv4Addr::new(192, 168, 1, 10),
                    dst: Ipv4Addr::new(173, 252, 88, 68),
                }),
-               res.0);
-    assert_eq!(res.1, ParserState::ContinueWithFirstChild);
+               res);
 }
 
 #[test]

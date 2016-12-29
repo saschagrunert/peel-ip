@@ -16,7 +16,7 @@ fn tcp_parser_variant() {
 fn parse_tcp_success() {
     let parser = TcpParser;
     let res = parser.parse(TCP_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Tcp(TcpPacket {
                    source_port: 51781,
                    dest_port: 443,
@@ -35,7 +35,7 @@ fn parse_tcp_success() {
                    urgent_pointer: 0,
                    options: TCP_HEADER[20..].to_vec(),
                }),
-               res.0);
+               res);
 }
 
 #[test]

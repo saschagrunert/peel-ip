@@ -12,10 +12,10 @@ impl Parser for Ipv6Parser {
     /// Parse an `Ipv6Packet` from an `&[u8]`
     fn parse<'a>(&self,
                  input: &'a [u8],
-                 _: Option<&PacketNode>,
-                 _: Option<&PacketArena>,
+                 _: Option<&ParserNode>,
+                 _: Option<&ProtocolGraph>,
                  result: Option<&Vec<Self::Result>>)
-                 -> IResult<&'a [u8], (Self::Result, ParserState)> {
+                 -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
             expr_opt!(match result {
@@ -46,15 +46,6 @@ impl Parser for Ipv6Parser {
             src: tuple!(be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16) >>
             dst: tuple!(be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16) >>
 
-            // Adapt the control flow in case we have an `IPv6` as protocol number
-            state: expr_opt!(match next_header {
-                // IPv6 in IPv6
-                IpProtocol::Ipv6 => Some(ParserState::ContinueWithCurrent),
-
-                // Just use the usual control flow
-                _ => Some(ParserState::ContinueWithFirstChild),
-            }) >>
-
             (Layer::Ipv6(Ipv6Packet {
                 version: ver_tc_fl.0,
                 traffic_class: ver_tc_fl.1,
@@ -66,7 +57,7 @@ impl Parser for Ipv6Parser {
                                    src.4, src.5, src.6, src.7),
                 dst: Ipv6Addr::new(dst.0, dst.1, dst.2, dst.3,
                                    dst.4, dst.5, dst.6, dst.7),
-            }), state)
+            }))
         )
     }
 

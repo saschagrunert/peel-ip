@@ -12,10 +12,10 @@ impl Parser for EthernetParser {
     /// Parse an `EthernetPacket` from an `&[u8]`
     fn parse<'a>(&self,
                  input: &'a [u8],
-                 _: Option<&PacketNode>,
-                 _: Option<&PacketArena>,
+                 _: Option<&ParserNode>,
+                 _: Option<&ProtocolGraph>,
                  _: Option<&Vec<Self::Result>>)
-                 -> IResult<&'a [u8], (Self::Result, ParserState)> {
+                 -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             d: take!(6) >>
             s: take!(6) >>
@@ -25,7 +25,7 @@ impl Parser for EthernetParser {
                 dst: MacAddress(d[0], d[1], d[2], d[3], d[4], d[5]),
                 src: MacAddress(s[0], s[1], s[2], s[3], s[4], s[5]),
                 ethertype: e,
-            }), ParserState::ContinueWithFirstChild)
+            }))
         )
     }
 

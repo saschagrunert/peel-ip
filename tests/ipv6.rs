@@ -17,7 +17,7 @@ fn ipv6_parser_variant() {
 fn parse_ipv6_success() {
     let parser = Ipv6Parser;
     let res = parser.parse(IPV6_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Ipv6(Ipv6Packet {
                    version: 6,
                    traffic_class: 0,
@@ -28,8 +28,7 @@ fn parse_ipv6_success() {
                    src: Ipv6Addr::new(0x3ffe, 0x507, 0, 1, 0x200, 0x86ff, 0xfe05, 0x80da),
                    dst: Ipv6Addr::new(0x3ffe, 0x501, 0x410, 0, 0x2c0, 0xdfff, 0xfe47, 0x33e),
                }),
-               res.0);
-    assert_eq!(res.1, ParserState::ContinueWithFirstChild);
+               res);
 }
 
 #[test]

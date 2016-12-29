@@ -60,9 +60,14 @@ static PACKET_ETH_IPV4_IPV4: &'static [u8] =
       0x01, 0xa5, 0xd6, 0x63, 0x40, 0x00, 0x3f, 0x06, 0x9b, 0xfc, 0xc0, 0xa8, 0x01, 0x0a, 0xad, 0xfc, 0x58, 0x44];
 
 #[test]
+fn peel_success_dot() {
+    let mut peel = PeelIp::new();
+    assert!(peel.create_dot_file().is_ok());
+}
+
+#[test]
 fn peel_success_tcp() {
     let mut peel = PeelIp::new();
-    println!("{}", peel);
     peel.set_log_level(LogLevel::Trace);
     let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
     assert_eq!(result.len(), 3);

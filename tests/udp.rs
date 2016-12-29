@@ -14,14 +14,14 @@ fn udp_parser_variant() {
 fn parse_udp_success() {
     let parser = UdpParser;
     let res = parser.parse(UDP_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Udp(UdpPacket {
                    source_port: 53,
                    dest_port: 51166,
                    length: 146,
                    checksum: 44315,
                }),
-               res.0);
+               res);
 }
 
 #[test]

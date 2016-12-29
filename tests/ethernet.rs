@@ -14,14 +14,13 @@ fn eth_parser_variant() {
 fn parse_eth_success() {
     let parser = EthernetParser;
     let res = parser.parse(ETH_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Ethernet(EthernetPacket {
                    dst: MacAddress(1, 2, 3, 4, 5, 6),
                    src: MacAddress(7, 8, 9, 10, 11, 12),
                    ethertype: EtherType::Ipv4,
                }),
-               res.0);
-    assert_eq!(res.1, ParserState::ContinueWithFirstChild);
+               res);
 }
 
 #[test]

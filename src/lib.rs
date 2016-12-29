@@ -28,18 +28,15 @@ use prelude::*;
 /// Provides sensible imports for packet parsers
 pub mod prelude {
     pub use std::fmt;
-    pub use std::str::{FromStr, self};
+    pub use std::str::{self, FromStr};
     pub use std::net::{Ipv4Addr, Ipv6Addr};
     pub use nom::*;
     pub use peel::prelude::*;
 
     pub use super::{Layer, ParserVariant, PeelIp};
 
-    /// A shorthand for the packet parsing node
-    pub type PacketNode = ParserNode<Layer, ParserVariant>;
-
     /// A shorthand for the packet parsing arena
-    pub type PacketArena = ParserArena<Layer, ParserVariant>;
+    pub type ProtocolGraph = ParserGraph<Layer, ParserVariant>;
 
     /// Link
     pub use layer1::*;
@@ -162,28 +159,32 @@ impl PeelIp {
         // IPv4/6
         let ipv4 = p.link_new_parser(eth, Ipv4Parser);
         let ipv6 = p.link_new_parser(eth, Ipv6Parser);
+        p.link(ipv4, ipv6);
+        p.link(ipv4, ipv4);
+        p.link(ipv6, ipv6);
 
         // TCP
-        let tcp_ipv4 = p.link_new_parser(ipv4, TcpParser);
-        let tcp_ipv6 = p.link_new_parser(ipv6, TcpParser);
+        let tcp = p.new_parser(TcpParser);
+        p.link(ipv4, tcp);
+        p.link(ipv6, tcp);
 
         // UDP
-        let udp_ipv4 = p.link_new_parser(ipv4, UdpParser);
-        let udp_ipv6 = p.link_new_parser(ipv6, UdpParser);
+        let udp = p.new_parser(UdpParser);
+        p.link(ipv4, udp);
+        p.link(ipv6, udp);
 
         // TLS
-        let tls_ipv4 = p.link_new_parser(tcp_ipv4, TlsParser);
-        let tls_ipv6 = p.link_new_parser(tcp_ipv6, TlsParser);
+        let tls = p.new_parser(TlsParser);
+        p.link(tcp, tls);
 
         // HTTP
-        p.link_new_parser(tcp_ipv4, HttpParser);
-        p.link_new_parser(tcp_ipv6, HttpParser);
-        p.link_new_parser(tls_ipv4, HttpParser);
-        p.link_new_parser(tls_ipv6, HttpParser);
+        let http = p.new_parser(HttpParser);
+        p.link(tcp, http);
+        p.link(tls, http);
 
         // NTP
-        p.link_new_parser(udp_ipv4, NtpParser);
-        p.link_new_parser(udp_ipv6, NtpParser);
+        let ntp = p.new_parser(NtpParser);
+        p.link(udp, ntp);
 
         p
     }

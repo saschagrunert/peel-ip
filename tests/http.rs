@@ -11,8 +11,8 @@ fn parse_http_request_success_get() {
                None)
         .unwrap()
         .1;
-    println!("{}", res.0);
-    assert_eq!(res.0,
+    println!("{}", res);
+    assert_eq!(res,
                Layer::Http(HttpPacket::Request(HttpRequest {
                    request_method: HttpRequestMethod::Get,
                    path: "/some/path/".to_owned(),
@@ -40,7 +40,7 @@ fn parse_http_request_success_post() {
                None)
         .unwrap()
         .1;
-    assert_eq!(res.0,
+    assert_eq!(res,
                Layer::Http(HttpPacket::Request(HttpRequest {
                    request_method: HttpRequestMethod::Post,
                    path: "/".to_owned(),
@@ -112,7 +112,7 @@ fn parse_http_response_success_moved() {
                None)
         .unwrap()
         .1;
-    assert_eq!(res.0,
+    assert_eq!(res,
                Layer::Http(HttpPacket::Response(HttpResponse {
                    version: HttpVersion {
                        major: 1,
@@ -136,7 +136,7 @@ fn parse_http_response_success_ok() {
                None)
         .unwrap()
         .1;
-    assert_eq!(res.0,
+    assert_eq!(res,
                Layer::Http(HttpPacket::Response(HttpResponse {
                    version: HttpVersion {
                        major: 1,

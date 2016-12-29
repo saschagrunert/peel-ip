@@ -28,7 +28,7 @@ fn tls_parser_variant() {
 fn parse_tls_success() {
     let parser = TlsParser;
     let res = parser.parse(TLS_HEADER, None, None, None).unwrap().1;
-    println!("{}", res.0);
+    println!("{}", res);
     assert_eq!(Layer::Tls(TlsPacket {
                    content_type: TlsRecordContentType::Handshake,
                    version: TlsRecordVersion {
@@ -37,7 +37,7 @@ fn parse_tls_success() {
                    },
                    length: 244,
                }),
-               res.0);
+               res);
 }
 
 #[test]

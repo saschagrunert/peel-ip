@@ -12,10 +12,10 @@ impl Parser for TcpParser {
     /// Parse a `TcpPacket` from an `&[u8]`
     fn parse<'a>(&self,
                  input: &'a [u8],
-                 _: Option<&PacketNode>,
-                 _: Option<&PacketArena>,
+                 _: Option<&ParserNode>,
+                 _: Option<&ProtocolGraph>,
                  result: Option<&Vec<Self::Result>>)
-                 -> IResult<&'a [u8], (Self::Result, ParserState)> {
+                 -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
             expr_opt!(match result {
@@ -62,7 +62,7 @@ impl Parser for TcpParser {
                 checksum: checksum,
                 urgent_pointer: urgent_ptr,
                 options: options.to_vec()
-            }), ParserState::ContinueWithFirstChild)
+            }))
         )
     }
 
