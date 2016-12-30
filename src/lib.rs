@@ -42,6 +42,7 @@ pub mod prelude {
     /// Link
     pub use layer1::*;
     pub use layer1::ethernet::*;
+    pub use layer1::arp::*;
 
     /// Internet
     pub use layer2::*;
@@ -62,8 +63,11 @@ pub mod prelude {
 #[derive(Debug)]
 /// The return value for the variant retrieval of the Parser trait
 pub enum ParserVariant {
-    /// Ethernet protocol parser
+    /// Ethernet parser
     Ethernet(EthernetParser),
+
+    /// Address Resolution Protocol parser
+    Arp(ArpParser),
 
     /// Internet Protocol version 4 parser
     Ipv4(Ipv4Parser),
@@ -90,8 +94,11 @@ pub enum ParserVariant {
 #[derive(Debug, Eq, PartialEq)]
 /// Return values for the actual parsers
 pub enum Layer {
-    /// Ethernet protocol for layer 1
+    /// Ethernet protocol packet variant
     Ethernet(EthernetPacket),
+
+    /// Address Resolution Protocol packet variant
+    Arp(ArpPacket),
 
     /// Internet Protocol version 4 packet variant
     Ipv4(Ipv4Packet),
@@ -121,6 +128,7 @@ macro_rules! impl_fmt_display {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 match *self {
                     $name::Ethernet(_) => write!(f, "Ethernet"),
+                    $name::Arp(_) => write!(f, "ARP"),
                     $name::Ipv4(_) => write!(f, "IPv4"),
                     $name::Ipv6(_) => write!(f, "IPv6"),
                     $name::Tcp(_) => write!(f, "TCP"),
@@ -148,6 +156,9 @@ impl PeelIp {
 
         // Ethernet
         let eth = p.new_parser(EthernetParser);
+
+        // ARP
+        p.link_new_parser(eth, ArpParser);
 
         // IPv4/6
         let ipv4 = p.link_new_parser(eth, Ipv4Parser);

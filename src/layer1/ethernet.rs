@@ -57,6 +57,9 @@ pub enum EtherType {
     /// Internet Protocol Version 4
     Ipv4,
 
+    /// Address Resolution Protocol
+    Arp,
+
     /// Internet Protocol Version 6
     Ipv6,
 }
@@ -67,6 +70,7 @@ impl EtherType {
     pub fn from_u16(input: u16) -> Option<EtherType> {
         match input {
             0x0800 => Some(EtherType::Ipv4),
+            0x0806 => Some(EtherType::Arp),
             0x86DD => Some(EtherType::Ipv6),
             _ => None,
         }

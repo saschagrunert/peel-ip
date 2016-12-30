@@ -29,6 +29,9 @@ fn parse_eth_success_ethertypes() {
     let mut input = Vec::from(ETH_HEADER); // IPv4
     parser.parse(&input, None, None, None).unwrap();
 
+    input[13] = 0x06; // ARP
+    parser.parse(&input, None, None, None).unwrap();
+
     input[12] = 0x86; // IPv6
     input[13] = 0xdd;
     parser.parse(&input, None, None, None).unwrap();
