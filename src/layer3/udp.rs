@@ -13,7 +13,7 @@ impl Parser<PathIp> for UdpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut PathIp>)
+                 path: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
@@ -35,6 +35,9 @@ impl Parser<PathIp> for UdpParser {
             dst: be_u16 >>
             len: be_u16 >>
             checksum: be_u16 >>
+
+            // Try to track the connection
+            apply!(track_connection, path, result, src, dst) >>
 
             (Layer::Udp(UdpPacket {
                 source_port: src,

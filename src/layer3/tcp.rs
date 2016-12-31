@@ -13,7 +13,7 @@ impl Parser<PathIp> for TcpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option<&mut PathIp>)
+                 path: Option<&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
@@ -43,6 +43,9 @@ impl Parser<PathIp> for TcpParser {
             urgent_ptr : be_u16 >>
             options_check: expr_opt!((data_offset_res_flags.0 * 4).checked_sub(20)) >>
             options: take!(options_check) >>
+
+            // Try to track the connection
+            apply!(track_connection, path, result, src, dst) >>
 
             (Layer::Tcp(TcpPacket {
                 source_port: src,

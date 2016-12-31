@@ -12,6 +12,9 @@
 #![deny(missing_docs)]
 
 #[macro_use]
+extern crate log;
+
+#[macro_use]
 extern crate nom;
 extern crate peel;
 extern crate path;
@@ -32,7 +35,7 @@ pub mod prelude {
     pub use std::str::{self, FromStr};
     pub use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
     pub use nom::*;
-    pub use path::Path;
+    pub use path::{Path, Data, Identifier};
     pub use peel::prelude::*;
     pub use super::{Layer, ParserVariant, PeelIp};
 
@@ -189,6 +192,9 @@ impl PeelIp {
         // NTP
         let ntp = p.new_parser(NtpParser);
         p.link(udp, ntp);
+
+        // Create a path instance
+        p.data = Some(Path::new());
 
         p
     }

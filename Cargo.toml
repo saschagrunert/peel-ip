@@ -11,9 +11,7 @@ documentation = "https://docs.rs/peel-ip"
 description = "Packet parsing for the Internet Protocol Suite"
 
 [dependencies]
+log = "0"
 peel = "0"
 nom = {version = "2", features = ["verbose-errors"]}
 path = "0"
-
-[dev-dependencies]
-log = "0"
