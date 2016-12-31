@@ -16,7 +16,7 @@ fn ipv6_parser_variant() {
 #[test]
 fn parse_ipv6_success() {
     let mut parser = Ipv6Parser;
-    let res = parser.parse(IPV6_HEADER, None).unwrap().1;
+    let res = parser.parse(IPV6_HEADER, None, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Ipv6(Ipv6Packet {
                    version: 6,
@@ -36,11 +36,11 @@ fn parse_ipv6_success_ipprotocols() {
     let mut parser = Ipv6Parser;
     // TCP
     let mut input = Vec::from(IPV6_HEADER);
-    parser.parse(&input, None).unwrap();
+    parser.parse(&input, None, None).unwrap();
 
     // UDP
     input[6] = 17;
-    parser.parse(&input, None).unwrap();
+    parser.parse(&input, None, None).unwrap();
 }
 
 #[test]
@@ -48,7 +48,7 @@ fn parse_ipv6_failure_wrong_version() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input[0] = 0x55;
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::TagBits, &input[..])));
 }
@@ -58,7 +58,7 @@ fn parse_ipv6_failure_wrong_ipprotocol() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input[6] = 0xff;
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::MapOpt, &input[6..])));
 }
@@ -68,6 +68,6 @@ fn parse_ipv6_failure_too_small() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input.pop();
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(40)));
 }

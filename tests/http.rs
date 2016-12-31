@@ -6,7 +6,7 @@ use peel_ip::prelude::*;
 fn parse_http_request_success_get() {
     let mut parser = HttpParser;
     let res = parser.parse(b"GET /some/path/ HTTP/1.0\r\nHost: myhost.com\r\nUser-agent: Myagent/0.1\r\n\r\nTest data",
-               None)
+               None, None)
         .unwrap()
         .1;
     println!("{}", res);
@@ -33,7 +33,7 @@ fn parse_http_request_success_get() {
 fn parse_http_request_success_post() {
     let mut parser = HttpParser;
     let res = parser.parse(b"POST / HTTP/1.1\r\nHost: abc.com\r\n\r\n",
-               None)
+               None, None)
         .unwrap()
         .1;
     assert_eq!(res,
@@ -60,18 +60,18 @@ fn parse_http_request_success_methods() {
     for method in &methods {
         let mut input = Vec::from(*method);
         input.extend_from_slice(header.as_bytes());
-        parser.parse(&input, None).unwrap();
+        parser.parse(&input, None, None).unwrap();
     }
 }
 
 #[test]
 fn parse_http_request_failure_wrong_method() {
     let mut parser = HttpParser;
-    assert_eq!(parser.parse(b"GET", None),
+    assert_eq!(parser.parse(b"GET", None, None),
                IResult::Incomplete(Needed::Size(4)));
 
     let input = b"GOT ";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Error(Err::Position(ErrorKind::Alt, &input[..])));
 }
 
@@ -79,7 +79,7 @@ fn parse_http_request_failure_wrong_method() {
 fn parse_http_request_failure_wrong_path() {
     let mut parser = HttpParser;
     let input = b"GET HTTP/1.1";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Error(Err::Position(ErrorKind::Alt, &input[..])));
 }
 
@@ -87,7 +87,7 @@ fn parse_http_request_failure_wrong_path() {
 fn parse_http_request_failure_wrong_version() {
     let mut parser = HttpParser;
     let input = b"GET / HTTP/1.k";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Error(Err::Position(ErrorKind::Alt, &input[..])));
 }
 
@@ -95,7 +95,7 @@ fn parse_http_request_failure_wrong_version() {
 fn parse_http_request_failure_too_small() {
     let mut parser = HttpParser;
     let input = b"GET / HTTP/1.";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Incomplete(Needed::Unknown));
 }
 
@@ -103,7 +103,7 @@ fn parse_http_request_failure_too_small() {
 fn parse_http_response_success_moved() {
     let mut parser = HttpParser;
     let res = parser.parse(b"HTTP/1.1 301 Moved Permanently\r\nLocation: https://facebook.com\r\n\r\n",
-               None)
+               None, None)
         .unwrap()
         .1;
     assert_eq!(res,
@@ -125,7 +125,7 @@ fn parse_http_response_success_moved() {
 fn parse_http_response_success_ok() {
     let mut parser = HttpParser;
     let res = parser.parse(b"HTTP/1.0 200 OK\r\nHost: abc.com\r\n\r\n",
-               None)
+               None, None)
         .unwrap()
         .1;
     assert_eq!(res,
@@ -147,7 +147,7 @@ fn parse_http_response_success_ok() {
 fn parse_http_response_failure_wrong_protocol() {
     let mut parser = HttpParser;
     let input = b"HTTk/1.1";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Error(Err::Position(ErrorKind::Alt, &input[..])));
 }
 
@@ -155,7 +155,7 @@ fn parse_http_response_failure_wrong_protocol() {
 fn parse_http_response_failure_too_small() {
     let mut parser = HttpParser;
     let input = b"HTTP/1.1";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Incomplete(Needed::Size(9)));
 }
 
@@ -163,6 +163,6 @@ fn parse_http_response_failure_too_small() {
 fn parse_http_response_failure_wrong_status_code() {
     let mut parser = HttpParser;
     let input = b"HTTP/1.1 20A OK\r\n";
-    assert_eq!(parser.parse(input, None),
+    assert_eq!(parser.parse(input, None, None),
                IResult::Error(Err::Position(ErrorKind::Alt, &input[..])));
 }

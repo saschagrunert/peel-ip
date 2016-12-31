@@ -12,7 +12,7 @@ static PACKET: &'static [u8] = &[0x45, 0x00, 0x01, 0xa5, 0xd6, 0x63, 0x40, 0x00,
 fn ipv4_small_packet(bencher: &mut Bencher) {
     let mut parser = Ipv4Parser;
     bencher.iter(|| {
-        parser.parse(PACKET, None).unwrap();
+        parser.parse(PACKET, None, None).unwrap();
     });
     bencher.bytes = PACKET.len() as u64;
 }
@@ -23,7 +23,7 @@ fn ipv4_big_packet(bencher: &mut Bencher) {
     let mut input = Vec::from(PACKET);
     input.extend_from_slice(&[0xff; 1450]);
     bencher.iter(|| {
-        parser.parse(&input, None).unwrap();
+        parser.parse(&input, None, None).unwrap();
     });
     bencher.bytes = input.len() as u64;
 }

@@ -12,7 +12,7 @@ static PACKET: &'static [u8] = &[0x00, 0x01, 0x08, 0x00, 0x06, 0x04, 0x00, 0x01,
 fn arp_small_packet(bencher: &mut Bencher) {
     let mut parser = ArpParser;
     bencher.iter(|| {
-        parser.parse(PACKET, None).unwrap();
+        parser.parse(PACKET, None, None).unwrap();
     });
     bencher.bytes = PACKET.len() as u64;
 }
@@ -23,7 +23,7 @@ fn arp_big_packet(bencher: &mut Bencher) {
     let mut input = Vec::from(PACKET);
     input.extend_from_slice(&[0xff; 1450]);
     bencher.iter(|| {
-        parser.parse(&input, None).unwrap();
+        parser.parse(&input, None, None).unwrap();
     });
     bencher.bytes = input.len() as u64;
 }

@@ -5,14 +5,15 @@ use prelude::*;
 /// The Ethernet parser
 pub struct EthernetParser;
 
-impl Parser for EthernetParser {
+impl Parser<()> for EthernetParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
     /// Parse an `EthernetPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 _: Option<&Vec<Self::Result>>)
+                 _: Option<&Vec<Self::Result>>,
+                 _: Option <&mut ()>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             d: take!(6) >>

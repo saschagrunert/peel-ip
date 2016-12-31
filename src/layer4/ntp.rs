@@ -5,14 +5,15 @@ use prelude::*;
 /// The UDP parser
 pub struct NtpParser;
 
-impl Parser for NtpParser {
+impl Parser<()> for NtpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
     /// Parse a `NtpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>)
+                 result: Option<&Vec<Self::Result>>,
+                 _: Option <&mut ()>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the transport protocol from the parent parser (UDP)

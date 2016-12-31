@@ -44,7 +44,7 @@ static HTTP_RESPONSE: &'static [u8] =
 fn http_request(bencher: &mut Bencher) {
     let mut parser = HttpParser;
     bencher.iter(|| {
-        parser.parse(HTTP_REQUEST, None).unwrap();
+        parser.parse(HTTP_REQUEST, None, None).unwrap();
     });
     bencher.bytes = HTTP_REQUEST.len() as u64;
 }
@@ -55,7 +55,7 @@ fn http_request_large_payload(bencher: &mut Bencher) {
     let mut input = Vec::from(HTTP_REQUEST);
     input.extend_from_slice(&[0xff; 1450]);
     bencher.iter(|| {
-        parser.parse(&input, None).unwrap();
+        parser.parse(&input, None, None).unwrap();
     });
     bencher.bytes = input.len() as u64;
 }
@@ -64,7 +64,7 @@ fn http_request_large_payload(bencher: &mut Bencher) {
 fn http_response(bencher: &mut Bencher) {
     let mut parser = HttpParser;
     bencher.iter(|| {
-        parser.parse(HTTP_RESPONSE, None).unwrap();
+        parser.parse(HTTP_RESPONSE, None, None).unwrap();
     });
     bencher.bytes = HTTP_RESPONSE.len() as u64;
 }
@@ -75,7 +75,7 @@ fn http_response_large_payload(bencher: &mut Bencher) {
     let mut input = Vec::from(HTTP_RESPONSE);
     input.extend_from_slice(&[0xff; 1450]);
     bencher.iter(|| {
-        parser.parse(&input, None).unwrap();
+        parser.parse(&input, None, None).unwrap();
     });
     bencher.bytes = input.len() as u64;
 }

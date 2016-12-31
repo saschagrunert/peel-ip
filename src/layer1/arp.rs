@@ -5,14 +5,15 @@ use prelude::*;
 /// The ARP parser
 pub struct ArpParser;
 
-impl Parser for ArpParser {
+impl Parser<()> for ArpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
     /// Parse an `ArpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>)
+                 result: Option<&Vec<Self::Result>>,
+                 _: Option <&mut ()>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)

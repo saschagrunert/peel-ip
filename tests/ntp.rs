@@ -11,7 +11,7 @@ static NTP_HEADER: &'static [u8] =
 #[test]
 fn parse_ntp_success() {
     let mut parser = NtpParser;
-    let res = parser.parse(NTP_HEADER, None).unwrap().1;
+    let res = parser.parse(NTP_HEADER, None, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Ntp(NtpPacket {
                    li: 0,
@@ -35,6 +35,6 @@ fn parse_ntp_success() {
 #[test]
 fn parse_ntp_failure_too_small() {
     let mut parser = NtpParser;
-    let res = parser.parse(&NTP_HEADER[..47], None);
+    let res = parser.parse(&NTP_HEADER[..47], None, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(48)));
 }

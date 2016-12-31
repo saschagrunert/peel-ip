@@ -5,14 +5,15 @@ use prelude::*;
 /// The UDP parser
 pub struct UdpParser;
 
-impl Parser for UdpParser {
+impl Parser<()> for UdpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
     /// Parse an `UdpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>)
+                 result: Option<&Vec<Self::Result>>,
+                 _: Option <&mut ()>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)

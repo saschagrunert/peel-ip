@@ -147,7 +147,7 @@ pub struct PeelIp;
 
 impl PeelIp {
     /// Creates a new `Peel` structure for TCP/IP based packet parsing
-    pub fn new() -> Peel<Layer, ParserVariant> {
+    pub fn new() -> Peel<Layer, ParserVariant, ()> {
         // Create a tree
         let mut p = Peel::new();
 

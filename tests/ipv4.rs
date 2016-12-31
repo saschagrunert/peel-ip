@@ -14,7 +14,7 @@ fn ipv4_parser_variant() {
 #[test]
 fn parse_ipv4_success() {
     let mut parser = Ipv4Parser;
-    let res = parser.parse(IPV4_HEADER, None).unwrap().1;
+    let res = parser.parse(IPV4_HEADER, None, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Ipv4(Ipv4Packet {
                    version: 4,
@@ -38,11 +38,11 @@ fn parse_ipv4_success_ipprotocols() {
     let mut parser = Ipv4Parser;
     // TCP
     let mut input = Vec::from(IPV4_HEADER);
-    parser.parse(&input, None).unwrap();
+    parser.parse(&input, None, None).unwrap();
 
     // UDP
     input[9] = 17;
-    parser.parse(&input, None).unwrap();
+    parser.parse(&input, None, None).unwrap();
 }
 
 #[test]
@@ -50,7 +50,7 @@ fn parse_ipv4_failure_wrong_version() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input[0] = 0x55;
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::TagBits, &input[..])));
 }
@@ -60,7 +60,7 @@ fn parse_ipv4_failure_wrong_ipprotocol() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input[9] = 0xff;
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::MapOpt, &input[9..])));
 }
@@ -70,6 +70,6 @@ fn parse_ipv4_failure_too_small() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input.pop();
-    let res = parser.parse(&input, None);
+    let res = parser.parse(&input, None, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(20)));
 }
