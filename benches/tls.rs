@@ -23,20 +23,20 @@ static PACKET: &'static [u8] =
 
 #[bench]
 fn tls_small_packet(bencher: &mut Bencher) {
-    let parser = TlsParser;
+    let mut parser = TlsParser;
     bencher.iter(|| {
-        parser.parse(PACKET, None, None, None).unwrap();
+        parser.parse(PACKET, None).unwrap();
     });
     bencher.bytes = PACKET.len() as u64;
 }
 
 #[bench]
 fn tls_big_packet(bencher: &mut Bencher) {
-    let parser = TlsParser;
+    let mut parser = TlsParser;
     let mut input = Vec::from(PACKET);
     input.extend_from_slice(&[0xff; 1450]);
     bencher.iter(|| {
-        parser.parse(&input, None, None, None).unwrap();
+        parser.parse(&input, None).unwrap();
     });
     bencher.bytes = input.len() as u64;
 }

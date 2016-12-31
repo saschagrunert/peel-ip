@@ -4,7 +4,7 @@
 //! ```
 //! use peel_ip::PeelIp;
 //!
-//! let peel = PeelIp::new();
+//! let mut peel = PeelIp::new();
 //! let input = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0];
 //! let result = peel.traverse(&input, vec![]).unwrap();
 //! assert_eq!(result.len(), 1);
@@ -30,14 +30,11 @@ use prelude::*;
 pub mod prelude {
     pub use std::fmt;
     pub use std::str::{self, FromStr};
-    pub use std::net::{Ipv4Addr, Ipv6Addr};
+    pub use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
     pub use nom::*;
     pub use peel::prelude::*;
 
     pub use super::{Layer, ParserVariant, PeelIp};
-
-    /// A shorthand for the packet parsing arena
-    pub type ProtocolGraph = ParserGraph<Layer, ParserVariant>;
 
     /// Link
     pub use layer1::*;

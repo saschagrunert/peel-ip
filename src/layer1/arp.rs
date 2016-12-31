@@ -10,10 +10,8 @@ impl Parser for ArpParser {
     type Variant = ParserVariant;
 
     /// Parse an `ArpPacket` from an `&[u8]`
-    fn parse<'a>(&self,
+    fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 _: Option<&ParserNode>,
-                 _: Option<&ProtocolGraph>,
                  result: Option<&Vec<Self::Result>>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,

@@ -14,8 +14,8 @@ fn tcp_parser_variant() {
 
 #[test]
 fn parse_tcp_success() {
-    let parser = TcpParser;
-    let res = parser.parse(TCP_HEADER, None, None, None).unwrap().1;
+    let mut parser = TcpParser;
+    let res = parser.parse(TCP_HEADER, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Tcp(TcpPacket {
                    source_port: 51781,
@@ -40,17 +40,17 @@ fn parse_tcp_success() {
 
 #[test]
 fn parse_tcp_failure_too_small() {
-    let parser = TcpParser;
+    let mut parser = TcpParser;
     let mut input = Vec::from(TCP_HEADER);
     input.pop();
-    let res = parser.parse(&input, None, None, None);
+    let res = parser.parse(&input, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(32)));
 }
 
 #[test]
 fn parse_tcp_failure_wrong_result() {
-    let parser = TcpParser;
-    let res = parser.parse(TCP_HEADER, None, None, Some(&vec![]));
+    let mut parser = TcpParser;
+    let res = parser.parse(TCP_HEADER, Some(&vec![]));
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::ExprOpt, &TCP_HEADER[..])));
 }

@@ -18,9 +18,9 @@ fn arp_parser_variant() {
 
 #[test]
 fn parse_arp_success() {
-    let parser = ArpParser;
+    let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
-    let res = parser.parse(&input, None, None, None).unwrap().1;
+    let res = parser.parse(&input, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Arp(ArpPacket {
                    hardware_type: ArpHardwareType::Ethernet,
@@ -35,14 +35,14 @@ fn parse_arp_success() {
                }),
                res);
     input[7] = 2;
-    parser.parse(&input, None, None, None).unwrap().1;
+    parser.parse(&input, None).unwrap().1;
 }
 
 #[test]
 fn parse_rarp_success() {
-    let parser = ArpParser;
+    let mut parser = ArpParser;
     let mut input = Vec::from(RARP_REQUEST);
-    let res = parser.parse(&input, None, None, None).unwrap().1;
+    let res = parser.parse(&input, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Arp(ArpPacket {
                    hardware_type: ArpHardwareType::Ethernet,
@@ -57,34 +57,34 @@ fn parse_rarp_success() {
                }),
                res);
     input[7] = 4;
-    parser.parse(&input, None, None, None).unwrap().1;
+    parser.parse(&input, None).unwrap().1;
 }
 
 #[test]
 fn parse_arp_failure_too_small() {
-    let parser = ArpParser;
+    let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input.pop();
-    let res = parser.parse(&input, None, None, None);
+    let res = parser.parse(&input, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(28)));
 }
 
 #[test]
 fn parse_arp_failure_wrong_hardware_type() {
-    let parser = ArpParser;
+    let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input[1] = 0;
-    let res = parser.parse(&input, None, None, None);
+    let res = parser.parse(&input, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::MapOpt, &input[..])));
 }
 
 #[test]
 fn parse_arp_failure_wrong_operation() {
-    let parser = ArpParser;
+    let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input[7] = 0;
-    let res = parser.parse(&input, None, None, None);
+    let res = parser.parse(&input, None);
     assert_eq!(res,
                IResult::Error(Err::Position(ErrorKind::MapOpt, &input[6..])));
 }

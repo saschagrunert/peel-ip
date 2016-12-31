@@ -12,8 +12,8 @@ fn udp_parser_variant() {
 
 #[test]
 fn parse_udp_success() {
-    let parser = UdpParser;
-    let res = parser.parse(UDP_HEADER, None, None, None).unwrap().1;
+    let mut parser = UdpParser;
+    let res = parser.parse(UDP_HEADER, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Udp(UdpPacket {
                    source_port: 53,
@@ -26,9 +26,9 @@ fn parse_udp_success() {
 
 #[test]
 fn parse_udp_failure_too_small() {
-    let parser = UdpParser;
+    let mut parser = UdpParser;
     let mut input = Vec::from(UDP_HEADER);
     input.pop();
-    let res = parser.parse(&input, None, None, None);
+    let res = parser.parse(&input, None);
     assert_eq!(res, IResult::Incomplete(Needed::Size(8)));
 }
