@@ -5,7 +5,7 @@ use prelude::*;
 /// The HTTP parser
 pub struct HttpParser;
 
-impl Parser<()> for HttpParser {
+impl Parser<PathIp> for HttpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for HttpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut ()>)
+                 _: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
 

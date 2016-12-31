@@ -5,7 +5,7 @@ use prelude::*;
 /// The UDP parser
 pub struct NtpParser;
 
-impl Parser<()> for NtpParser {
+impl Parser<PathIp> for NtpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for NtpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut ()>)
+                 _: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the transport protocol from the parent parser (UDP)

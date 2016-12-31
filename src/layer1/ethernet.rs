@@ -5,7 +5,7 @@ use prelude::*;
 /// The Ethernet parser
 pub struct EthernetParser;
 
-impl Parser<()> for EthernetParser {
+impl Parser<PathIp> for EthernetParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for EthernetParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  _: Option<&Vec<Self::Result>>,
-                 _: Option <&mut ()>)
+                 _: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             d: take!(6) >>

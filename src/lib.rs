@@ -32,9 +32,12 @@ pub mod prelude {
     pub use std::str::{self, FromStr};
     pub use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
     pub use nom::*;
+    pub use path::Path;
     pub use peel::prelude::*;
-
     pub use super::{Layer, ParserVariant, PeelIp};
+
+    /// A shorthand for our 
+    pub type PathIp = Path<IpProtocol, ()>;
 
     /// Link
     pub use layer1::*;
@@ -147,7 +150,7 @@ pub struct PeelIp;
 
 impl PeelIp {
     /// Creates a new `Peel` structure for TCP/IP based packet parsing
-    pub fn new() -> Peel<Layer, ParserVariant, ()> {
+    pub fn new() -> Peel<Layer, ParserVariant, PathIp> {
         // Create a tree
         let mut p = Peel::new();
 

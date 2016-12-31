@@ -5,7 +5,7 @@ use prelude::*;
 /// The IPv4 parser
 pub struct Ipv4Parser;
 
-impl Parser<()> for Ipv4Parser {
+impl Parser<PathIp> for Ipv4Parser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for Ipv4Parser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut ()>)
+                 _: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)

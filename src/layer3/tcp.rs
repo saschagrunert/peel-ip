@@ -5,7 +5,7 @@ use prelude::*;
 /// The TCP parser
 pub struct TcpParser;
 
-impl Parser<()> for TcpParser {
+impl Parser<PathIp> for TcpParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for TcpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option<&mut ()>)
+                 _: Option<&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)

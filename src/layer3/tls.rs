@@ -5,7 +5,7 @@ use prelude::*;
 /// The TLS parser
 pub struct TlsParser;
 
-impl Parser<()> for TlsParser {
+impl Parser<PathIp> for TlsParser {
     type Result = Layer;
     type Variant = ParserVariant;
 
@@ -13,7 +13,7 @@ impl Parser<()> for TlsParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut ()>)
+                 _: Option <&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the transport protocol from the parent parser (TCP)
