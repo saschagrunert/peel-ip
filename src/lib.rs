@@ -51,6 +51,7 @@ pub mod prelude {
     pub use layer2::*;
     pub use layer2::ipv4::*;
     pub use layer2::ipv6::*;
+    pub use layer2::icmp::*;
 
     // Transport
     pub use layer3::*;
@@ -77,6 +78,9 @@ pub enum ParserVariant {
 
     /// Internet Protocol version 6 parser
     Ipv6(Ipv6Parser),
+
+    /// Internet Control Message Protocol parser
+    Icmp(IcmpParser),
 
     /// Transmission Control Protocol parser
     Tcp(TcpParser),
@@ -109,6 +113,9 @@ pub enum Layer {
     /// Internet Protocol version 6 packet variant
     Ipv6(Ipv6Packet),
 
+    /// Internet Control Message Protocol packet variant
+    Icmp(IcmpPacket),
+
     /// Transmission Control Protocol packet variant
     Tcp(TcpPacket),
 
@@ -134,6 +141,7 @@ macro_rules! impl_fmt_display {
                     $name::Arp(_) => write!(f, "ARP"),
                     $name::Ipv4(_) => write!(f, "IPv4"),
                     $name::Ipv6(_) => write!(f, "IPv6"),
+                    $name::Icmp(_) => write!(f, "ICMP"),
                     $name::Tcp(_) => write!(f, "TCP"),
                     $name::Tls(_) => write!(f, "TLS"),
                     $name::Http(_) => write!(f, "HTTP"),
@@ -170,28 +178,26 @@ impl PeelIp {
         p.link(ipv4, ipv4);
         p.link(ipv6, ipv6);
 
+        // ICMP
+        p.link_new_parser(ipv4, IcmpParser);
+
         // TCP
-        let tcp = p.new_parser(TcpParser);
-        p.link(ipv4, tcp);
+        let tcp = p.link_new_parser(ipv4, TcpParser);
         p.link(ipv6, tcp);
 
         // UDP
-        let udp = p.new_parser(UdpParser);
-        p.link(ipv4, udp);
+        let udp = p.link_new_parser(ipv4, UdpParser);
         p.link(ipv6, udp);
 
         // TLS
-        let tls = p.new_parser(TlsParser);
-        p.link(tcp, tls);
+        let tls = p.link_new_parser(tcp, TlsParser);
 
         // HTTP
-        let http = p.new_parser(HttpParser);
-        p.link(tcp, http);
+        let http = p.link_new_parser(tcp, HttpParser);
         p.link(tls, http);
 
         // NTP
-        let ntp = p.new_parser(NtpParser);
-        p.link(udp, ntp);
+        p.link_new_parser(udp, NtpParser);
 
         // Create a path instance
         p.data = Some(Path::new());

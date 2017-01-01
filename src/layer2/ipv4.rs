@@ -112,6 +112,9 @@ pub struct Ipv4Packet {
 #[derive(Clone, Copy, Debug, Hash, Eq, PartialEq)]
 /// Current supported IPv4 protocols
 pub enum IpProtocol {
+    /// Internet Control Message Protocol
+    Icmp,
+
     /// IP encapsulation within IP
     IpIp,
 
@@ -130,6 +133,7 @@ impl IpProtocol {
     /// invalid.
     pub fn from_u8(input: u8) -> Option<IpProtocol> {
         match input {
+            1 => Some(IpProtocol::Icmp),
             4 => Some(IpProtocol::IpIp),
             6 => Some(IpProtocol::Tcp),
             17 => Some(IpProtocol::Udp),

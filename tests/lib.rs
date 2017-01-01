@@ -251,3 +251,13 @@ fn peel_success_eth() {
     let result = peel.traverse(&input, vec![]).unwrap();
     assert_eq!(result.len(), 1);
 }
+
+#[test]
+fn peel_failure_path_tracking() {
+    let mut peel = PeelIp::new();
+    peel.set_log_level(LogLevel::Trace);
+    let mut result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    result.swap(0, 1);
+    track_connection(&[], peel.data.as_mut(), Some(&result), 0, 0);
+    assert_eq!(peel.data.unwrap().connection_count(), 1);
+}

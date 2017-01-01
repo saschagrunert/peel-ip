@@ -13,7 +13,7 @@ impl Parser<PathIp> for HttpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 path: Option<&mut PathIp>)
+                 _: Option<&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
 

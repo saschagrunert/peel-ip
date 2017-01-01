@@ -3,11 +3,12 @@ digraph {
     1 [label="\"ARP\""]
     2 [label="\"IPv4\""]
     3 [label="\"IPv6\""]
-    4 [label="\"TCP\""]
-    5 [label="\"UDP\""]
-    6 [label="\"TLS\""]
-    7 [label="\"HTTP\""]
-    8 [label="\"NTP\""]
+    4 [label="\"ICMP\""]
+    5 [label="\"TCP\""]
+    6 [label="\"UDP\""]
+    7 [label="\"TLS\""]
+    8 [label="\"HTTP\""]
+    9 [label="\"NTP\""]
     0 -> 1
     0 -> 2
     0 -> 3
@@ -15,11 +16,12 @@ digraph {
     2 -> 2
     3 -> 3
     2 -> 4
-    3 -> 4
     2 -> 5
     3 -> 5
-    4 -> 6
-    4 -> 7
-    6 -> 7
+    2 -> 6
+    3 -> 6
+    5 -> 7
     5 -> 8
+    7 -> 8
+    6 -> 9
 }
