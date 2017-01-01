@@ -13,7 +13,7 @@ pub fn track_connection<'a, 'b>(input: &'a [u8],
                                 dst_port: u16) -> IResult<&'a [u8], Option<&'b mut Data<()>>> {
     // Get the identifier
     let identifier = match result {
-        Some(vector) => match vector.last() {
+        Some(vector) => match vector.get(1) {
             // IPv4
             Some(&Layer::Ipv4(ref p)) => Some(Identifier::new(IpAddr::V4(p.src), src_port,
                                                               IpAddr::V4(p.dst), dst_port,
