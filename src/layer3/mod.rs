@@ -10,7 +10,7 @@ pub fn track_connection<'a, 'b>(input: &'a [u8],
                                 path: Option<&'b mut PathIp>,
                                 result: Option<&Vec<Layer>>,
                                 src_port: u16,
-                                dst_port: u16) -> IResult<&'a [u8], Option<&'b mut Data<()>>> {
+                                dst_port: u16) -> IResult<&'a [u8], ()> {
     // Get the identifier
     let identifier = match result {
         Some(vector) => match vector.get(1) {
@@ -30,10 +30,10 @@ pub fn track_connection<'a, 'b>(input: &'a [u8],
         None => None,
     };
 
-    let data = match (path, identifier) {
-        (Some(path), Some(identifier)) => path.track(&identifier).ok(),
-        _ => None,
-    };
+    // Just track the connection, do nothing additional with the data
+    if let (Some(path), Some(identifier)) = (path, identifier) {
+        path.track(identifier).ok();
+    }
 
-    IResult::Done(input, data)
+    IResult::Done(input, ())
 }

@@ -13,7 +13,7 @@ impl Parser<PathIp> for UdpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 path: Option <&mut PathIp>)
+                 path: Option<&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
