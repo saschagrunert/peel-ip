@@ -52,6 +52,7 @@ pub mod prelude {
     pub use layer2::ipv4::*;
     pub use layer2::ipv6::*;
     pub use layer2::icmp::*;
+    pub use layer2::icmpv6::*;
 
     // Transport
     pub use layer3::*;
@@ -81,6 +82,9 @@ pub enum ParserVariant {
 
     /// Internet Control Message Protocol parser
     Icmp(IcmpParser),
+
+    /// Internet Control Message Protocol version 6 parser
+    Icmpv6(Icmpv6Parser),
 
     /// Transmission Control Protocol parser
     Tcp(TcpParser),
@@ -116,6 +120,9 @@ pub enum Layer {
     /// Internet Control Message Protocol packet variant
     Icmp(IcmpPacket),
 
+    /// Internet Control Message Protocol version 6 packet variant
+    Icmpv6(Icmpv6Packet),
+
     /// Transmission Control Protocol packet variant
     Tcp(TcpPacket),
 
@@ -142,6 +149,7 @@ macro_rules! impl_fmt_display {
                     $name::Ipv4(_) => write!(f, "IPv4"),
                     $name::Ipv6(_) => write!(f, "IPv6"),
                     $name::Icmp(_) => write!(f, "ICMP"),
+                    $name::Icmpv6(_) => write!(f, "ICMPv6"),
                     $name::Tcp(_) => write!(f, "TCP"),
                     $name::Tls(_) => write!(f, "TLS"),
                     $name::Http(_) => write!(f, "HTTP"),
@@ -178,8 +186,9 @@ impl PeelIp {
         p.link(ipv4, ipv4);
         p.link(ipv6, ipv6);
 
-        // ICMP
+        // ICMP/v6
         p.link_new_parser(ipv4, IcmpParser);
+        p.link_new_parser(ipv6, Icmpv6Parser);
 
         // TCP
         let tcp = p.link_new_parser(ipv4, TcpParser);

@@ -36,7 +36,8 @@ impl Parser<PathIp> for IcmpParser {
             // ICMP echo
             data: cond!((message_type == IcmpType::EchoReply ||
                          message_type == IcmpType::EchoRequest) &&
-                        code == 0, call!(IcmpEcho::parse)) >>
+                        code == 0,
+                        map!(IcmpEcho::parse, |x| IcmpData::Echo(x))) >>
 
             // Return the parsing result
             (Layer::Icmp(IcmpPacket {
@@ -113,17 +114,18 @@ pub struct IcmpEcho {
 }
 
 impl IcmpEcho {
-    named!(parse<&[u8], IcmpData>,
+    named!(#[doc = "Parse an ICMP echo request or reply"],
+           pub parse<&[u8], IcmpEcho>,
         do_parse!(
             identifier: be_u16 >>
             sequence_number: be_u16 >>
             payload: opt!(map!(rest, Vec::from)) >>
 
-            (IcmpData::Echo(IcmpEcho {
+            (IcmpEcho {
                 identifier: identifier,
                 sequence_number: sequence_number,
                 payload: payload,
-            }))
+            })
         )
     );
 }

@@ -126,6 +126,9 @@ pub enum IpProtocol {
 
     /// IPv6 Encapsulation
     Ipv6,
+
+    /// Internet Control Message Protocol version 6
+    Icmpv6,
 }
 
 impl IpProtocol {
@@ -138,6 +141,7 @@ impl IpProtocol {
             6 => Some(IpProtocol::Tcp),
             17 => Some(IpProtocol::Udp),
             41 => Some(IpProtocol::Ipv6),
+            58 => Some(IpProtocol::Icmpv6),
             _ => None,
         }
     }
