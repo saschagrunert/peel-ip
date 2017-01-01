@@ -13,7 +13,7 @@ impl Parser<PathIp> for ArpParser {
     fn parse<'a>(&mut self,
                  input: &'a [u8],
                  result: Option<&Vec<Self::Result>>,
-                 _: Option <&mut PathIp>)
+                 _: Option<&mut PathIp>)
                  -> IResult<&'a [u8], Self::Result> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
