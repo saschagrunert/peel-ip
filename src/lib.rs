@@ -39,7 +39,7 @@ pub mod prelude {
     pub use peel::prelude::*;
     pub use super::{Layer, ParserVariant, PeelIp};
 
-    /// A shorthand for our 
+    /// A shorthand for the `IpProtocol` based `Path`
     pub type PathIp = Path<IpProtocol, ()>;
 
     /// Link
