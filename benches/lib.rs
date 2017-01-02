@@ -33,7 +33,7 @@ static PACKET_ETH_IPV4_TCP_TLS: &'static [u8] =
       0x0a, 0x00, 0x06, 0x00, 0x04, 0x00, 0x17, 0x00, 0x18];
 
 #[bench]
-fn tree_parsing(bencher: &mut Bencher) {
+fn tree_parsing_eth_ipv4_tcp_tls(bencher: &mut Bencher) {
     let mut peel = PeelIp::new();
     bencher.iter(|| {
         assert!(peel.traverse(PACKET_ETH_IPV4_TCP_TLS, vec![]).is_ok());
