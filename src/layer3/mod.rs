@@ -4,13 +4,13 @@ pub mod tls;
 pub mod udp;
 
 use prelude::*;
+use path::error::PathResult;
 
 /// Track a connection based in the current parsing result and return the connection data
-pub fn track_connection<'a, 'b>(input: &'a [u8],
-                                path: Option<&'b mut PathIp>,
+pub fn track_connection<'a, 'b>(path: Option<&'b mut PathIp>,
                                 result: Option<&Vec<Layer>>,
                                 src_port: u16,
-                                dst_port: u16) -> IResult<&'a [u8], ()> {
+                                dst_port: u16) -> PathResult<()> {
     // Get the identifier
     let identifier = match result {
         Some(vector) => match vector.get(1) {
@@ -32,8 +32,8 @@ pub fn track_connection<'a, 'b>(input: &'a [u8],
 
     // Just track the connection, do nothing additional with the data
     if let (Some(path), Some(identifier)) = (path, identifier) {
-        path.track(identifier).ok();
+        path.track(identifier)?;
     }
 
-    IResult::Done(input, ())
+    Ok(())
 }

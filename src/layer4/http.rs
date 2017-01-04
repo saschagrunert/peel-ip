@@ -66,7 +66,7 @@ impl HttpPacket {
                     Some(&Layer::Tls(_)) => {
                         if let Some(transport_layer) = vector.iter().rev().nth(1) {
                             match transport_layer {
-                                &Layer::Tcp(ref data) if (data.source_port == 443 || data.dest_port == 443) => {
+                                &Layer::Tcp(ref tcp) if (tcp.header.source_port == 443 || tcp.header.dest_port == 443) => {
                                     Some(Layer::Http(HttpPacket::Any))
                                 }
                                 _ => None

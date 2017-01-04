@@ -32,10 +32,13 @@ use prelude::*;
 /// Provides sensible imports for packet parsers
 pub mod prelude {
     pub use std::fmt;
+    pub use std::error::Error;
     pub use std::str::{self, FromStr};
     pub use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+
     pub use nom::*;
     pub use path::{Path, Connection, Data, Identifier};
+    pub use path::error::ErrorType as PathErrorType;
     pub use peel::prelude::*;
     pub use super::{Layer, ParserVariant, PeelIp};
 

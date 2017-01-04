@@ -5,6 +5,9 @@ use log::LogLevel;
 extern crate peel_ip;
 use peel_ip::prelude::*;
 
+extern crate time;
+use time::Duration;
+
 static PACKET_ETH_IPV4_TCP: &'static [u8] =
     &[0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x45, 0x00, 0x00, 0x34,
       0x73, 0x22, 0x40, 0x00, 0x3f, 0x06, 0x3a, 0x09, 0x0a, 0x00, 0x00, 0x65, 0x42, 0xc4, 0x41, 0x70, 0xca, 0x45,
@@ -102,22 +105,25 @@ fn peel_success_tcp() {
                }));
     assert_eq!(result[2],
                Layer::Tcp(TcpPacket {
-                   source_port: 51781,
-                   dest_port: 443,
-                   sequence_no: 2556845834,
-                   ack_no: 1151172357,
-                   data_offset: 32,
-                   reserved: 0,
-                   flag_urg: false,
-                   flag_ack: true,
-                   flag_psh: false,
-                   flag_rst: false,
-                   flag_syn: false,
-                   flag_fin: false,
-                   window: 8192,
-                   checksum: 49138,
-                   urgent_pointer: 0,
-                   options: vec![1, 1, 8, 10, 0, 2, 44, 44, 99, 147, 241, 91],
+                   header: TcpHeader {
+                       source_port: 51781,
+                       dest_port: 443,
+                       sequence_no: 2556845834,
+                       ack_no: 1151172357,
+                       data_offset: 32,
+                       reserved: 0,
+                       flag_urg: false,
+                       flag_ack: true,
+                       flag_psh: false,
+                       flag_rst: false,
+                       flag_syn: false,
+                       flag_fin: false,
+                       window: 8192,
+                       checksum: 49138,
+                       urgent_pointer: 0,
+                       options: vec![1, 1, 8, 10, 0, 2, 44, 44, 99, 147, 241, 91],
+                   },
+                   path_error: None,
                }));
 }
 
@@ -166,10 +172,13 @@ fn peel_success_udp() {
                }));
     assert_eq!(result[2],
                Layer::Udp(UdpPacket {
-                   source_port: 2396,
-                   dest_port: 53,
-                   length: 36,
-                   checksum: 61449,
+                   header: UdpHeader {
+                       source_port: 2396,
+                       dest_port: 53,
+                       length: 36,
+                       checksum: 61449,
+                   },
+                   path_error: None,
                }));
 }
 
@@ -274,6 +283,20 @@ fn peel_failure_path_tracking() {
     peel.set_log_level(LogLevel::Trace);
     let mut result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
     result.swap(0, 1);
-    track_connection(&[], peel.data.as_mut(), Some(&result), 0, 0);
+    assert!(track_connection(peel.data.as_mut(), Some(&result), 0, 0).is_ok());
     assert_eq!(peel.data.unwrap().connection_count(), 1);
+}
+
+#[test]
+fn peel_track_timeout() {
+    let mut peel = PeelIp::new();
+    peel.set_log_level(LogLevel::Trace);
+    peel.data.as_mut().unwrap().timeout = Duration::from_std(std::time::Duration::from_millis(1)).unwrap();
+
+    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    assert_eq!(result.len(), 3);
+    std::thread::sleep(std::time::Duration::from_millis(10));
+
+    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    assert_eq!(result.len(), 3);
 }

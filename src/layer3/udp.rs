@@ -37,13 +37,19 @@ impl Parser<PathIp> for UdpParser {
             checksum: be_u16 >>
 
             // Try to track the connection
-            apply!(track_connection, path, result, src, dst) >>
+            path_error: expr_opt!(match track_connection(path, result, src, dst) {
+                Err(e) => Some(Some(e.code)),
+                Ok(()) => Some(None),
+            }) >>
 
             (Layer::Udp(UdpPacket {
-                source_port: src,
-                dest_port: dst,
-                length: len,
-                checksum: checksum,
+                header: UdpHeader {
+                    source_port: src,
+                    dest_port: dst,
+                    length: len,
+                    checksum: checksum,
+                },
+                path_error: path_error,
             }))
         )
     }
@@ -56,6 +62,16 @@ impl Parser<PathIp> for UdpParser {
 #[derive(Debug, Eq, PartialEq)]
 /// Representation of an User Datagram Protocol packet
 pub struct UdpPacket {
+    /// The header of the UDP packet
+    pub header: UdpHeader,
+
+    /// Set to some error code if the connection tracking failed
+    pub path_error: Option<PathErrorType>,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+/// Representation of an User Datagram Protocol packet header
+pub struct UdpHeader {
     /// This field identifies the sender's port when meaningful and should be assumed to be the
     /// port to reply to if needed. If not used, then it should be zero. If the source host is the
     /// client, the port number is likely to be an ephemeral port number. If the source host is the

@@ -45,25 +45,31 @@ impl Parser<PathIp> for TcpParser {
             options: take!(options_check) >>
 
             // Try to track the connection
-            apply!(track_connection, path, result, src, dst) >>
+            path_error: expr_opt!(match track_connection(path, result, src, dst) {
+                Err(e) => Some(Some(e.code)),
+                Ok(()) => Some(None),
+            }) >>
 
             (Layer::Tcp(TcpPacket {
-                source_port: src,
-                dest_port: dst,
-                sequence_no: seq,
-                ack_no: ack,
-                data_offset: data_offset_res_flags.0 * 4,
-                reserved: data_offset_res_flags.1,
-                flag_urg: data_offset_res_flags.2 & 0b100000 == 0b100000,
-                flag_ack: data_offset_res_flags.2 & 0b010000 == 0b010000,
-                flag_psh: data_offset_res_flags.2 & 0b001000 == 0b001000,
-                flag_rst: data_offset_res_flags.2 & 0b000100 == 0b000100,
-                flag_syn: data_offset_res_flags.2 & 0b000010 == 0b000010,
-                flag_fin: data_offset_res_flags.2 & 0b000001 == 0b000001,
-                window: window,
-                checksum: checksum,
-                urgent_pointer: urgent_ptr,
-                options: options.to_vec()
+                header: TcpHeader {
+                    source_port: src,
+                    dest_port: dst,
+                    sequence_no: seq,
+                    ack_no: ack,
+                    data_offset: data_offset_res_flags.0 * 4,
+                    reserved: data_offset_res_flags.1,
+                    flag_urg: data_offset_res_flags.2 & 0b100000 == 0b100000,
+                    flag_ack: data_offset_res_flags.2 & 0b010000 == 0b010000,
+                    flag_psh: data_offset_res_flags.2 & 0b001000 == 0b001000,
+                    flag_rst: data_offset_res_flags.2 & 0b000100 == 0b000100,
+                    flag_syn: data_offset_res_flags.2 & 0b000010 == 0b000010,
+                    flag_fin: data_offset_res_flags.2 & 0b000001 == 0b000001,
+                    window: window,
+                    checksum: checksum,
+                    urgent_pointer: urgent_ptr,
+                    options: options.to_vec()
+                },
+                path_error: path_error,
             }))
         )
     }
@@ -74,8 +80,18 @@ impl Parser<PathIp> for TcpParser {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-/// Representation of a Transmission Control Protocol packet
+/// Representation of an User Datagram Protocol packet
 pub struct TcpPacket {
+    /// The header of the TCP packet
+    pub header: TcpHeader,
+
+    /// Set to some error code if the connection tracking failed
+    pub path_error: Option<PathErrorType>,
+}
+
+#[derive(Debug, Eq, PartialEq)]
+/// Representation of a Transmission Control Protocol packet header
+pub struct TcpHeader {
     /// Identifies the sending port
     pub source_port: u16,
 

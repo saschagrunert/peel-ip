@@ -16,10 +16,13 @@ fn parse_udp_success() {
     let res = parser.parse(UDP_HEADER, None, None).unwrap().1;
     println!("{}", res);
     assert_eq!(Layer::Udp(UdpPacket {
-                   source_port: 53,
-                   dest_port: 51166,
-                   length: 146,
-                   checksum: 44315,
+                   header: UdpHeader {
+                       source_port: 53,
+                       dest_port: 51166,
+                       length: 146,
+                       checksum: 44315,
+                   },
+                   path_error: None,
                }),
                res);
 }
