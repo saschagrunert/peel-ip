@@ -15,3 +15,6 @@ log = "0"
 peel = "0"
 nom = {version = "2", features = ["verbose-errors"]}
 path = "0"
+
+[dev-dependencies]
+time = "*"
