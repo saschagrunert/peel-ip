@@ -2,7 +2,7 @@
 use prelude::*;
 
 #[derive(Debug, Clone)]
-/// The ICMPv6 parser
+/// The `ICMPv6` parser
 pub struct Icmpv6Parser;
 
 impl Parser<PathIp> for Icmpv6Parser {
@@ -72,7 +72,7 @@ pub struct Icmpv6Packet {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-/// Available ICMPv6 control messages
+/// Available `ICMPv6` control messages
 pub enum Icmpv6Type {
     /// Echo reply used to ping
     EchoReply,
@@ -94,7 +94,7 @@ impl Icmpv6Type {
 }
 
 #[derive(Debug, Eq, PartialEq)]
-/// Representation of a certain ICMPv6 message
+/// Representation of a certain `ICMPv6` message
 pub enum Icmpv6Data {
     /// ICMPv6 ping request and reply
     Echo(IcmpEcho),

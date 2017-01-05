@@ -7,10 +7,10 @@ use prelude::*;
 use path::error::PathResult;
 
 /// Track a connection based in the current parsing result and return the connection data
-pub fn track_connection<'a, 'b>(path: Option<&'b mut PathIp>,
-                                result: Option<&Vec<Layer>>,
-                                src_port: u16,
-                                dst_port: u16) -> PathResult<()> {
+pub fn track_connection<'a>(path: Option<&'a mut PathIp>,
+                            result: Option<&Vec<Layer>>,
+                            src_port: u16,
+                            dst_port: u16) -> PathResult<()> {
     // Get the identifier
     let identifier = match result {
         Some(vector) => match vector.get(1) {

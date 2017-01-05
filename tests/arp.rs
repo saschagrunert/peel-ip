@@ -35,7 +35,7 @@ fn parse_arp_success() {
                }),
                res);
     input[7] = 2;
-    parser.parse(&input, None, None).unwrap().1;
+    parser.parse(&input, None, None).unwrap();
 }
 
 #[test]
@@ -57,7 +57,7 @@ fn parse_rarp_success() {
                }),
                res);
     input[7] = 4;
-    parser.parse(&input, None, None).unwrap().1;
+    parser.parse(&input, None, None).unwrap();
 }
 
 #[test]
