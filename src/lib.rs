@@ -37,6 +37,7 @@ pub mod prelude {
     pub use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
     pub use nom::*;
+    pub use log::LogLevel;
     pub use path::{Path, Connection, Data, Identifier};
     pub use path::error::ErrorType as PathErrorType;
     pub use peel::prelude::*;
@@ -223,5 +224,20 @@ impl PeelIp {
     /// Traverse the parser tree
     pub fn traverse(&mut self, input: &[u8], result: Vec<Layer>) -> PeelResult<Vec<Layer>> {
         self.peel.traverse(input, result)
+    }
+
+    /// Create a graphviz `graph.dot` file representation in the current directory
+    pub fn create_dot_file(&mut self) -> PeelResult<()> {
+        self.peel.create_dot_file()
+    }
+
+    /// Set the global log level for reporting
+    pub fn set_log_level(&mut self, level: LogLevel) {
+        self.peel.set_log_level(level)
+    }
+
+    /// Return the internal `PathIp`
+    pub fn path(&mut self) -> &mut PathIp {
+        self.peel.data.as_mut().unwrap()
     }
 }

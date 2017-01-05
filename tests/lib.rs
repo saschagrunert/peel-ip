@@ -283,15 +283,15 @@ fn peel_failure_path_tracking() {
     peel.set_log_level(LogLevel::Trace);
     let mut result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
     result.swap(0, 1);
-    assert!(track_connection(peel.data.as_mut(), Some(&result), 0, 0).is_ok());
-    assert_eq!(peel.data.unwrap().connection_count(), 1);
+    assert!(track_connection(Some(peel.path()), Some(&result), 0, 0).is_ok());
+    assert_eq!(peel.path().connection_count(), 1);
 }
 
 #[test]
 fn peel_track_timeout() {
     let mut peel = PeelIp::new();
     peel.set_log_level(LogLevel::Trace);
-    peel.data.as_mut().unwrap().timeout = Duration::from_std(std::time::Duration::from_millis(1)).unwrap();
+    peel.path().timeout = Duration::from_std(std::time::Duration::from_millis(1)).unwrap();
 
     let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
     assert_eq!(result.len(), 3);
