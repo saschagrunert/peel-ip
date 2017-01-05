@@ -168,11 +168,14 @@ impl_fmt_display!(Layer);
 impl_fmt_display!(ParserVariant);
 
 /// Peel for TCP/IP packets
-pub struct PeelIp;
+pub struct PeelIp {
+    /// Internal peel structure
+    pub peel: Peel<Layer, ParserVariant, PathIp>,
+}
 
 impl PeelIp {
     /// Creates a new `Peel` structure for TCP/IP based packet parsing
-    pub fn new() -> Peel<Layer, ParserVariant, PathIp> {
+    pub fn new() -> PeelIp {
         // Create a tree
         let mut p = Peel::new();
 
@@ -214,6 +217,11 @@ impl PeelIp {
         // Create a path instance
         p.data = Some(Path::new());
 
-        p
+        PeelIp { peel: p }
+    }
+
+    /// Traverse the parser tree
+    pub fn traverse(&mut self, input: &[u8], result: Vec<Layer>) -> PeelResult<Vec<Layer>> {
+        self.peel.traverse(input, result)
     }
 }
