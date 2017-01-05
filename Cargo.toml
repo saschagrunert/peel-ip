@@ -17,4 +17,4 @@ nom = {version = "2", features = ["verbose-errors"]}
 path = "0"
 
 [dev-dependencies]
-time = "*"
+time = "0"
