@@ -1,7 +1,5 @@
 #[macro_use]
 extern crate log;
-use log::LogLevel;
-
 extern crate peel_ip;
 use peel_ip::prelude::*;
 
