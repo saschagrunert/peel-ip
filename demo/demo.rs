@@ -1,0 +1,139 @@
+extern crate peel_ip;
+use peel_ip::prelude::*;
+
+extern crate pcap;
+use pcap::{Active, Capture, Device};
+
+extern crate rain;
+use rain::Graph;
+
+extern crate time;
+use time::Duration;
+
+use std::thread::{self, JoinHandle};
+use std::sync::mpsc::{channel, Sender, Receiver};
+
+type IpIdentifier = Identifier<IpProtocol>;
+
+#[derive(Debug)]
+struct Packet {
+    identifier: IpIdentifier,
+    length: usize,
+    result: String,
+}
+
+impl Packet {
+    fn new(identifier: IpIdentifier, result: String, length: usize) -> Packet {
+        Packet {
+            identifier: identifier,
+            length: length,
+            result: result,
+        }
+    }
+}
+
+pub fn main() {
+    start().expect("Failed in main function");
+}
+
+fn start() -> Result<(), Box<Error>> {
+    let (tx, rx) = channel();
+
+    // Worker thread for capturing packets
+    let capture = Device::lookup()?.open()?;
+    let peel = PeelIp::new();
+    let packet_capture = start_packet_capture_thread(capture, peel, tx);
+
+    // Worker thread for doing the computation on packets
+    let mut path: Path<IpProtocol, usize> = Path::new();
+    path.timeout = Duration::seconds(4);
+    let graph = Graph::with_prefix_length(135);
+    let computation = start_graph_drawing_thread(path, graph, rx);
+
+    // Join the threads together
+    computation.join().unwrap();
+    packet_capture.join().unwrap();
+    Ok(())
+}
+
+fn start_packet_capture_thread(mut capture: Capture<Active>, mut peel: PeelIp, tx: Sender<Packet>) -> JoinHandle<()> {
+    thread::spawn(move || {
+        while let Ok(packet) = capture.next() {
+            // Parse the packet
+            if let Ok(res) = peel.traverse(packet.data, vec![]) {
+                if let Some(identifier) = get_identifier(&res) {
+                    let mut result_string = res.iter().map(|r| format!("{}, ", r)).collect::<Vec<String>>().concat();
+                    result_string.pop();
+                    result_string.pop();
+                    let packet = Packet::new(identifier, result_string, packet.data.len());
+                    tx.send(packet).unwrap();
+                }
+            }
+        }
+    })
+}
+
+fn start_graph_drawing_thread(mut path: Path<IpProtocol, usize>,
+                              mut graph: Graph<u32>,
+                              rx: Receiver<Packet>)
+                              -> JoinHandle<()> {
+    thread::spawn(move || {
+        loop {
+            thread::sleep(std::time::Duration::from_secs(2));
+
+            // Get all pending values
+            for packet in rx.try_iter() {
+                let line_string = format!("{}: {}", packet.identifier, packet.result);
+
+                // Track the connection as usual if no error happended
+                match path.track(packet.identifier.clone()) {
+                    Ok(connection) => {
+                        connection.data.custom = Some(connection.data.custom.unwrap_or_default() + packet.length);
+                        graph.add(&line_string,
+                                 connection.data.custom.unwrap_or_default() as u32)
+                            .is_ok();
+                    }
+                    Err(_) => {
+                        graph.remove(&line_string).is_ok();
+                    }
+                };
+
+                // Flush connections with a timeout
+                for _ in path.flush() {
+                    graph.remove(&line_string).is_ok();
+                }
+            }
+
+            // Print the graph
+            graph.print().unwrap();
+        }
+    })
+}
+
+fn get_identifier(result: &[Layer]) -> Option<IpIdentifier> {
+    // Try to get the ports
+    let ports = match result.get(2) {
+        Some(&Layer::Tcp(ref tcp)) => Some((tcp.header.source_port, tcp.header.dest_port)),
+        Some(&Layer::Udp(ref udp)) => Some((udp.header.source_port, udp.header.dest_port)),
+        _ => None,
+    };
+
+    match (result.get(1), ports) {
+        (Some(&Layer::Ipv4(ref p)), Some((src_port, dst_port))) => {
+            Some(Identifier::new(IpAddr::V4(p.src),
+                                 src_port,
+                                 IpAddr::V4(p.dst),
+                                 dst_port,
+                                 p.protocol))
+        }
+        (Some(&Layer::Ipv6(ref p)), Some((src_port, dst_port))) => {
+            Some(Identifier::new(IpAddr::V6(p.src),
+                                 src_port,
+                                 IpAddr::V6(p.dst),
+                                 dst_port,
+                                 p.next_header))
+        }
+        // Previous result found, but not the correct one
+        _ => None,
+    }
+}
