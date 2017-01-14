@@ -8,17 +8,12 @@ static IPV6_HEADER: &'static [u8] = &[0x60, 0x00, 0x00, 0x00, 0x00, 0x2f, 0x06, 
                                       0x3e];
 
 #[test]
-fn ipv6_parser_variant() {
-    let parser = Ipv6Parser;
-    println!("{:?}", parser.variant());
-}
-
-#[test]
 fn parse_ipv6_success() {
     let mut parser = Ipv6Parser;
-    let res = parser.parse(IPV6_HEADER, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Ipv6(Ipv6Packet {
+    println!("{}", parser);
+    let parsing_result = parser.parse(IPV6_HEADER, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&Ipv6Packet {
                    version: 6,
                    traffic_class: 0,
                    flow_label: 0,
@@ -48,9 +43,7 @@ fn parse_ipv6_failure_wrong_version() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input[0] = 0x55;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::TagBits, &input[..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -58,9 +51,7 @@ fn parse_ipv6_failure_wrong_ipprotocol() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input[6] = 0xff;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::MapOpt, &input[6..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -68,6 +59,5 @@ fn parse_ipv6_failure_too_small() {
     let mut parser = Ipv6Parser;
     let mut input = Vec::from(IPV6_HEADER);
     input.pop();
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res, IResult::Incomplete(Needed::Size(40)));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }

@@ -19,17 +19,12 @@ static TLS_HEADER: &'static [u8] =
       0x0b, 0x00, 0x02, 0x01, 0x00, 0x00, 0x0a, 0x00, 0x06, 0x00, 0x04, 0x00, 0x17, 0x00, 0x18];
 
 #[test]
-fn tls_parser_variant() {
-    let parser = TlsParser;
-    println!("{:?}", parser.variant());
-}
-
-#[test]
 fn parse_tls_success() {
     let mut parser = TlsParser;
-    let res = parser.parse(TLS_HEADER, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Tls(TlsPacket {
+    println!("{}", parser);
+    let parsing_result = parser.parse(TLS_HEADER, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&TlsPacket {
                    content_type: TlsRecordContentType::Handshake,
                    version: TlsRecordVersion {
                        major: 3,
@@ -60,14 +55,12 @@ fn parse_tls_failure_content_type() {
     // Handshake
     let mut input = Vec::from(TLS_HEADER);
     input[0] = 0;
-    assert_eq!(parser.parse(&input, None, None),
-               IResult::Error(Err::Position(ErrorKind::MapOpt, &input[..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
 fn parse_tls_failure_too_small() {
     let mut parser = TlsParser;
     let input = [20, 0];
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res, IResult::Incomplete(Needed::Size(3)));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }

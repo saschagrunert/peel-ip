@@ -5,22 +5,27 @@ use prelude::*;
 /// The ARP parser
 pub struct ArpParser;
 
-impl Parser<PathIp> for ArpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for ArpParser {
     /// Parse an `ArpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // Check the parent node for the correct EtherType
-                    Some(&Layer::Ethernet(ref e)) if e.ethertype == EtherType::Arp => Some(()),
+                    Some(ref any) => if let Some(eth) = any.downcast_ref::<EthernetPacket>() {
+                        if eth.ethertype == EtherType::Arp {
+                            Some(())
+                        } else {
+                            None
+                        }
+                    } else {
+                        None
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -39,7 +44,7 @@ impl Parser<PathIp> for ArpParser {
             t: take!(6) >>
             ip_target: map!(be_u32, Ipv4Addr::from) >>
 
-            (Layer::Arp(ArpPacket {
+            (Box::new(ArpPacket {
                 hardware_type: hw_type,
                 protocol_type: p_type,
                 hardware_length: hw_len,
@@ -52,9 +57,11 @@ impl Parser<PathIp> for ArpParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Arp(self.clone())
+impl fmt::Display for ArpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ARP")
     }
 }
 

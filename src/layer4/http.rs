@@ -5,16 +5,13 @@ use prelude::*;
 /// The HTTP parser
 pub struct HttpParser;
 
-impl Parser<PathIp> for HttpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for HttpParser {
     /// Parse a `HttpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
 
             // Check the transport protocol from the parent parser (TCP or TLS)
@@ -22,7 +19,11 @@ impl Parser<PathIp> for HttpParser {
                 // TCP based plain text transfer
                 cond_reduce!(match result {
                     Some(vector) => match vector.last() {
-                        Some(&Layer::Tcp(_)) => true,
+                        Some(ref any) => if let Some(_) = any.downcast_ref::<TcpPacket>() {
+                            true
+                        } else {
+                            false
+                        },
                         _ => false, // Previous result found, but not correct parent
                     },
                     None => true, // Parse also if no result is given, for testability
@@ -35,9 +36,11 @@ impl Parser<PathIp> for HttpParser {
             (result)
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Http(self.clone())
+impl fmt::Display for HttpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "HTTP")
     }
 }
 
@@ -55,26 +58,28 @@ pub enum HttpPacket {
 }
 
 impl HttpPacket {
-    named!(parse_plain<&[u8], Layer>,
+    named!(parse_plain<&[u8], ParserResult>,
            alt!(call!(HttpRequest::parse) | call!(HttpResponse::parse))
     );
 
-    fn parse_encrypted<'a>(input: &'a [u8], result: Option<&Vec<Layer>>) -> IResult<&'a [u8], Layer> {
+    fn parse_encrypted<'a>(input: &'a [u8], result: Option<&ParserResultVec>) -> IResult<&'a [u8], ParserResult> {
         expr_opt!(input,
             match result {
-                Some(vector) => match vector.last() {
-                    Some(&Layer::Tls(_)) => {
-                        if let Some(transport_layer) = vector.iter().rev().nth(1) {
-                            match transport_layer {
-                                &Layer::Tcp(ref tcp) if (tcp.header.source_port == 443 || tcp.header.dest_port == 443) => {
-                                    Some(Layer::Http(HttpPacket::Any))
-                                }
-                                _ => None
+                Some(vector) => match (vector.last(), vector.iter().rev().nth(1)) {
+
+                    (Some(ref any_tls), Some(ref any_tcp)) => {
+                        match (any_tls.downcast_ref::<TlsPacket>(),
+                               any_tcp.downcast_ref::<TcpPacket>()) {
+
+                            /// TLS and TCP combination matches
+                            (Some(_), Some(tcp)) if (tcp.header.source_port == 443 || tcp.header.dest_port == 443) => {
+                                Some(Box::new(HttpPacket::Any))
                             }
-                        } else {
-                            None // No transport layer available
+
+                            _ => None,
                         }
                     },
+
                     _ => None, // Previous result found, but not correct parent
                 },
                 _ => None,
@@ -100,7 +105,7 @@ pub struct HttpRequest {
 }
 
 impl HttpRequest {
-    named!(parse<&[u8], Layer>,
+    named!(parse<&[u8], ParserResult>,
         ws!(do_parse!(
             // HTTP Request parsing
             method: alt!(
@@ -120,7 +125,7 @@ impl HttpRequest {
             version: call!(HttpVersion::parse) >>
             headers: call!(HttpHeader::parse) >>
 
-            (Layer::Http(HttpPacket::Request(HttpRequest {
+            (Box::new(HttpPacket::Request(HttpRequest {
                 request_method: method,
                 path: path.to_owned(),
                 version: version,
@@ -236,7 +241,7 @@ pub struct HttpResponse {
 }
 
 impl HttpResponse {
-    named!(parse<&[u8], Layer>,
+    named!(parse<&[u8], ParserResult>,
         ws!(do_parse!(
             // HTTP response parsing
             tag_fast!("HTTP/") >>
@@ -245,7 +250,7 @@ impl HttpResponse {
             reason: map_res!(take_until!("\r"), str::from_utf8) >>
             headers: call!(HttpHeader::parse) >>
 
-            (Layer::Http(HttpPacket::Response(HttpResponse {
+            (Box::new(HttpPacket::Response(HttpResponse {
                 version: version,
                 code: code,
                 reason: reason.to_owned(),

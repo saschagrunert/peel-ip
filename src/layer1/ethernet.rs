@@ -5,31 +5,30 @@ use prelude::*;
 /// The Ethernet parser
 pub struct EthernetParser;
 
-impl Parser<PathIp> for EthernetParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for EthernetParser {
     /// Parse an `EthernetPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 _: Option<&Vec<Self::Result>>,
+                 _: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             d: take!(6) >>
             s: take!(6) >>
             e: map_opt!(be_u16, EtherType::from_u16) >>
 
-            (Layer::Ethernet(EthernetPacket {
+            (Box::new(EthernetPacket {
                 dst: MacAddress(d[0], d[1], d[2], d[3], d[4], d[5]),
                 src: MacAddress(s[0], s[1], s[2], s[3], s[4], s[5]),
                 ethertype: e,
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Ethernet(self.clone())
+impl fmt::Display for EthernetParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Ethernet")
     }
 }
 

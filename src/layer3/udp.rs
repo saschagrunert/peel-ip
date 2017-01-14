@@ -5,23 +5,37 @@ use prelude::*;
 /// The UDP parser
 pub struct UdpParser;
 
-impl Parser<PathIp> for UdpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for UdpParser {
     /// Parse an `UdpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  path: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // Check the parent node for the correct IP protocol
-                    Some(&Layer::Ipv4(ref p)) if p.protocol == IpProtocol::Udp => Some(()),
-                    Some(&Layer::Ipv6(ref p)) if p.next_header == IpProtocol::Udp => Some(()),
+                    Some(ref any) => match (any.downcast_ref::<Ipv4Packet>(),
+                                            any.downcast_ref::<Ipv6Packet>()) {
+
+                        // IPv4
+                        (Some(ipv4), _) => if ipv4.protocol == IpProtocol::Udp {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        // IPv6
+                        (_, Some(ipv6)) => if ipv6.next_header == IpProtocol::Udp {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        _ => None,
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -42,7 +56,7 @@ impl Parser<PathIp> for UdpParser {
                 Ok(()) => Some(None),
             }) >>
 
-            (Layer::Udp(UdpPacket {
+            (Box::new(UdpPacket {
                 header: UdpHeader {
                     source_port: src,
                     dest_port: dst,
@@ -53,9 +67,11 @@ impl Parser<PathIp> for UdpParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Udp(self.clone())
+impl fmt::Display for UdpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "UDP")
     }
 }
 

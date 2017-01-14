@@ -5,25 +5,37 @@ use prelude::*;
 /// The IPv4 parser
 pub struct Ipv4Parser;
 
-impl Parser<PathIp> for Ipv4Parser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for Ipv4Parser {
     /// Parse an `Ipv4Packet` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
-                    // Check the parent node for the correct EtherType
-                    Some(&Layer::Ethernet(ref e)) if e.ethertype == EtherType::Ipv4 => Some(()),
+                    // Check the correct EtherType or IPv4 in IPv4 encapsulation
+                    Some(ref any) => match (any.downcast_ref::<EthernetPacket>(),
+                                            any.downcast_ref::<Ipv4Packet>()) {
 
-                    // IPv4 in IPv4 encapsulation
-                    Some(&Layer::Ipv4(ref e)) if e.protocol == IpProtocol::IpIp => Some(()),
+                        // Ethernet
+                        (Some(eth), _) => if eth.ethertype == EtherType::Ipv4 {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        // IPv4
+                        (_, Some(ipv4)) => if ipv4.protocol == IpProtocol::IpIp {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        _ => None,
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -47,7 +59,7 @@ impl Parser<PathIp> for Ipv4Parser {
             dst: map!(be_u32, Ipv4Addr::from) >>
 
             // Return the parsing result
-            (Layer::Ipv4(Ipv4Packet {
+            (Box::new(Ipv4Packet {
                 version: ver_ihl.0,
                 ihl: ver_ihl.1 << 2,
                 tos: tos,
@@ -63,9 +75,11 @@ impl Parser<PathIp> for Ipv4Parser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Ipv4(self.clone())
+impl fmt::Display for Ipv4Parser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IPv4")
     }
 }
 

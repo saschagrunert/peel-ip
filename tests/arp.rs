@@ -11,18 +11,13 @@ static RARP_REQUEST: &'static [u8] = &[0x00, 0x01, 0x08, 0x00, 0x06, 0x04, 0x00,
                                        0x00, 0x00];
 
 #[test]
-fn arp_parser_variant() {
-    let parser = ArpParser;
-    println!("{:?}", parser.variant());
-}
-
-#[test]
 fn parse_arp_success() {
     let mut parser = ArpParser;
+    println!("{}", parser);
     let mut input = Vec::from(ARP_REQUEST);
-    let res = parser.parse(&input, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Arp(ArpPacket {
+    let parsing_result = parser.parse(&input, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&ArpPacket {
                    hardware_type: ArpHardwareType::Ethernet,
                    protocol_type: EtherType::Ipv4,
                    hardware_length: 6,
@@ -42,9 +37,9 @@ fn parse_arp_success() {
 fn parse_rarp_success() {
     let mut parser = ArpParser;
     let mut input = Vec::from(RARP_REQUEST);
-    let res = parser.parse(&input, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Arp(ArpPacket {
+    let parsing_result = parser.parse(&input, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&ArpPacket {
                    hardware_type: ArpHardwareType::Ethernet,
                    protocol_type: EtherType::Ipv4,
                    hardware_length: 6,
@@ -65,8 +60,7 @@ fn parse_arp_failure_too_small() {
     let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input.pop();
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res, IResult::Incomplete(Needed::Size(28)));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -74,9 +68,7 @@ fn parse_arp_failure_wrong_hardware_type() {
     let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input[1] = 0;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::MapOpt, &input[..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -84,7 +76,5 @@ fn parse_arp_failure_wrong_operation() {
     let mut parser = ArpParser;
     let mut input = Vec::from(ARP_REQUEST);
     input[7] = 0;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::MapOpt, &input[6..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }

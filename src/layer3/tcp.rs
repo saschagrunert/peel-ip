@@ -5,23 +5,37 @@ use prelude::*;
 /// The TCP parser
 pub struct TcpParser;
 
-impl Parser<PathIp> for TcpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for TcpParser {
     /// Parse a `TcpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  path: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the IP protocol from the parent parser (IPv4 or IPv6)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // Check the parent node for the correct IP protocol
-                    Some(&Layer::Ipv4(ref p)) if p.protocol == IpProtocol::Tcp => Some(()),
-                    Some(&Layer::Ipv6(ref p)) if p.next_header == IpProtocol::Tcp => Some(()),
+                    Some(ref any) => match (any.downcast_ref::<Ipv4Packet>(),
+                                            any.downcast_ref::<Ipv6Packet>()) {
+
+                        // IPv4
+                        (Some(ipv4), _) => if ipv4.protocol == IpProtocol::Tcp {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        // IPv6
+                        (_, Some(ipv6)) => if ipv6.next_header == IpProtocol::Tcp {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        _ => None,
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -50,7 +64,7 @@ impl Parser<PathIp> for TcpParser {
                 Ok(()) => Some(None),
             }) >>
 
-            (Layer::Tcp(TcpPacket {
+            (Box::new(TcpPacket {
                 header: TcpHeader {
                     source_port: src,
                     dest_port: dst,
@@ -73,9 +87,11 @@ impl Parser<PathIp> for TcpParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Tcp(self.clone())
+impl fmt::Display for TcpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TCP")
     }
 }
 

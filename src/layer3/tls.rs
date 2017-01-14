@@ -5,22 +5,23 @@ use prelude::*;
 /// The TLS parser
 pub struct TlsParser;
 
-impl Parser<PathIp> for TlsParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for TlsParser {
     /// Parse a `TlsPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the transport protocol from the parent parser (TCP)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // Check the parent node for the correct transport protocol
-                    Some(&Layer::Tcp(_)) => Some(()),
+                    Some(ref any) => if let Some(_) = any.downcast_ref::<TcpPacket>() {
+                        Some(())
+                    } else {
+                        None
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -33,7 +34,7 @@ impl Parser<PathIp> for TlsParser {
             version: take!(2) >>
             length: be_u16 >>
 
-            (Layer::Tls(TlsPacket {
+            (Box::new(TlsPacket {
                 content_type: content_type,
                 version: TlsRecordVersion {
                     major: version[0],
@@ -43,9 +44,11 @@ impl Parser<PathIp> for TlsParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Tls(self.clone())
+impl fmt::Display for TlsParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "TLS")
     }
 }
 

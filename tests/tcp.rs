@@ -7,17 +7,12 @@ static TCP_HEADER: &'static [u8] = &[0xca, 0x45, 0x01, 0xbb, 0x98, 0x66, 0x5f, 0
                                      0x2c, 0x2e, 0x63, 0x93, 0xf1, 0x5b];
 
 #[test]
-fn tcp_parser_variant() {
-    let parser = TcpParser;
-    println!("{:?}", parser.variant());
-}
-
-#[test]
 fn parse_tcp_success() {
     let mut parser = TcpParser;
-    let res = parser.parse(TCP_HEADER, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Tcp(TcpPacket {
+    println!("{}", parser);
+    let parsing_result = parser.parse(TCP_HEADER, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&TcpPacket {
                    header: TcpHeader {
                        source_port: 51781,
                        dest_port: 443,
@@ -46,14 +41,11 @@ fn parse_tcp_failure_too_small() {
     let mut parser = TcpParser;
     let mut input = Vec::from(TCP_HEADER);
     input.pop();
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res, IResult::Incomplete(Needed::Size(32)));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
 fn parse_tcp_failure_wrong_result() {
     let mut parser = TcpParser;
-    let res = parser.parse(TCP_HEADER, Some(&vec![]), None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::ExprOpt, &TCP_HEADER[..])));
+    assert!(parser.parse(TCP_HEADER, Some(&vec![]), None).to_full_result().is_err());
 }

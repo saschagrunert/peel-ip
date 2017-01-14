@@ -80,14 +80,14 @@ fn peel_success_tcp() {
     peel.set_log_level(LogLevel::Trace);
     let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
     assert_eq!(result.len(), 3);
-    assert_eq!(result[0],
-               Layer::Ethernet(EthernetPacket {
+    assert_eq!(result[0].downcast_ref(),
+               Some(&EthernetPacket {
                    dst: Default::default(),
                    src: Default::default(),
                    ethertype: EtherType::Ipv4,
                }));
-    assert_eq!(result[1],
-               Layer::Ipv4(Ipv4Packet {
+    assert_eq!(result[1].downcast_ref(),
+               Some(&Ipv4Packet {
                    version: 4,
                    ihl: 20,
                    tos: 0,
@@ -101,8 +101,8 @@ fn peel_success_tcp() {
                    src: Ipv4Addr::new(10, 0, 0, 101),
                    dst: Ipv4Addr::new(66, 196, 65, 112),
                }));
-    assert_eq!(result[2],
-               Layer::Tcp(TcpPacket {
+    assert_eq!(result[2].downcast_ref(),
+               Some(&TcpPacket {
                    header: TcpHeader {
                        source_port: 51781,
                        dest_port: 443,
@@ -133,8 +133,8 @@ fn peel_success_tls_http() {
     packet.extend_from_slice(TLS_HEADER);
     let result = peel.traverse(&packet, vec![]).unwrap();
     assert_eq!(result.len(), 5);
-    assert_eq!(result[3],
-               Layer::Tls(TlsPacket {
+    assert_eq!(result[3].downcast_ref(),
+               Some(&TlsPacket {
                    content_type: TlsRecordContentType::Handshake,
                    version: TlsRecordVersion {
                        major: 3,
@@ -142,7 +142,7 @@ fn peel_success_tls_http() {
                    },
                    length: 244,
                }));
-    assert_eq!(result[4], Layer::Http(HttpPacket::Any));
+    assert_eq!(result[4].downcast_ref(), Some(&HttpPacket::Any));
 }
 
 #[test]
@@ -151,14 +151,14 @@ fn peel_success_udp() {
     peel.set_log_level(LogLevel::Trace);
     let result = peel.traverse(PACKET_ETH_IPV6_UDP, vec![]).unwrap();
     assert_eq!(result.len(), 3);
-    assert_eq!(result[0],
-               Layer::Ethernet(EthernetPacket {
+    assert_eq!(result[0].downcast_ref(),
+               Some(&EthernetPacket {
                    dst: Default::default(),
                    src: Default::default(),
                    ethertype: EtherType::Ipv6,
                }));
-    assert_eq!(result[1],
-               Layer::Ipv6(Ipv6Packet {
+    assert_eq!(result[1].downcast_ref(),
+               Some(&Ipv6Packet {
                    version: 6,
                    traffic_class: 0,
                    flow_label: 0,
@@ -168,8 +168,8 @@ fn peel_success_udp() {
                    src: Ipv6Addr::new(0x3ffe, 0x507, 0, 1, 0x200, 0x86ff, 0xfe05, 0x80da),
                    dst: Ipv6Addr::new(0x3ffe, 0x501, 0x4819, 0, 0, 0, 0, 0x42),
                }));
-    assert_eq!(result[2],
-               Layer::Udp(UdpPacket {
+    assert_eq!(result[2].downcast_ref(),
+               Some(&UdpPacket {
                    header: UdpHeader {
                        source_port: 2396,
                        dest_port: 53,
@@ -188,8 +188,8 @@ fn peel_success_ntp() {
     packet.extend_from_slice(NTP_HEADER);
     let result = peel.traverse(&packet, vec![]).unwrap();
     assert_eq!(result.len(), 4);
-    assert_eq!(result[3],
-               Layer::Ntp(NtpPacket {
+    assert_eq!(result[3].downcast_ref(),
+               Some(&NtpPacket {
                    li: 0,
                    version: 4,
                    mode: 3,
@@ -221,8 +221,8 @@ fn peel_success_ipv6_in_ipv4() {
     peel.set_log_level(LogLevel::Trace);
     let result = peel.traverse(PACKET_ETH_IPV4_IPV6, vec![]).unwrap();
     assert_eq!(result.len(), 3);
-    assert_eq!(result[1],
-               Layer::Ipv4(Ipv4Packet {
+    assert_eq!(result[1].downcast_ref(),
+               Some(&Ipv4Packet {
                    version: 4,
                    ihl: 20,
                    tos: 0,
@@ -236,8 +236,8 @@ fn peel_success_ipv6_in_ipv4() {
                    src: Ipv4Addr::new(10, 0, 0, 1),
                    dst: Ipv4Addr::new(10, 0, 0, 2),
                }));
-    assert_eq!(result[2],
-               Layer::Ipv6(Ipv6Packet {
+    assert_eq!(result[2].downcast_ref(),
+               Some(&Ipv6Packet {
                    version: 6,
                    traffic_class: 0,
                    flow_label: 0,

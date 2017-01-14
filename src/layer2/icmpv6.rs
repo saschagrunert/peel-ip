@@ -5,21 +5,26 @@ use prelude::*;
 /// The `ICMPv6` parser
 pub struct Icmpv6Parser;
 
-impl Parser<PathIp> for Icmpv6Parser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for Icmpv6Parser {
     /// Parse an `Icmpv6Packet` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // ICMPv6 on top of IPv6
-                    Some(&Layer::Ipv6(ref e)) if e.next_header == IpProtocol::Icmpv6 => Some(()),
+                    Some(ref any) => if let Some(ipv6) = any.downcast_ref::<Ipv6Packet>() {
+                        if ipv6.next_header == IpProtocol::Icmpv6 {
+                            Some(())
+                        } else {
+                            None
+                        }
+                    } else {
+                        None
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -40,7 +45,7 @@ impl Parser<PathIp> for Icmpv6Parser {
                         map!(IcmpEcho::parse, |x| Icmpv6Data::Echo(x))) >>
 
             // Return the parsing result
-            (Layer::Icmpv6(Icmpv6Packet {
+            (Box::new(Icmpv6Packet {
                 message_type: message_type,
                 code: code,
                 checksum: checksum,
@@ -48,9 +53,11 @@ impl Parser<PathIp> for Icmpv6Parser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Icmpv6(self.clone())
+impl fmt::Display for Icmpv6Parser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ICMPv6")
     }
 }
 

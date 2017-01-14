@@ -5,23 +5,25 @@ use prelude::*;
 /// The UDP parser
 pub struct NtpParser;
 
-impl Parser<PathIp> for NtpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
+impl Parsable<PathIp> for NtpParser {
 
     /// Parse a `NtpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the transport protocol from the parent parser (UDP)
             expr_opt!(match result {
                 Some(vector) => {
                     match vector.last() {
                         // Check the parent node for the correct transport protocol
-                        Some(&Layer::Udp(_)) => Some(()),
+                        Some(ref any) => if let Some(_) = any.downcast_ref::<UdpPacket>() {
+                            Some(())
+                        } else {
+                            None
+                        },
 
                         // Previous result found, but not correct parent
                         _ => None,
@@ -47,7 +49,7 @@ impl Parser<PathIp> for NtpParser {
             auth: opt!(complete!(pair!(be_u32,
                                  map!(take!(16), Vec::from)))) >>
 
-            (Layer::Ntp(NtpPacket {
+            (Box::new(NtpPacket {
                 li: b0.0,
                 version: b0.1,
                 mode: b0.2,
@@ -65,9 +67,11 @@ impl Parser<PathIp> for NtpParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Ntp(self.clone())
+impl fmt::Display for NtpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "NTP")
     }
 }
 

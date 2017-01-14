@@ -5,28 +5,47 @@ use prelude::*;
 /// The IPv6 parser
 pub struct Ipv6Parser;
 
-impl Parser<PathIp> for Ipv6Parser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for Ipv6Parser {
     /// Parse an `Ipv6Packet` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             // Check the type from the parent parser (Ethernet)
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
-                    // Check the parent node for the correct EtherType
-                    Some(&Layer::Ethernet(ref e)) if e.ethertype == EtherType::Ipv6 => Some(()),
 
-                    // IPv6 in IPv4 encapsulation
-                    Some(&Layer::Ipv4(ref e)) if e.protocol == IpProtocol::Ipv6 => Some(()),
+                    // Check the correct EtherType or IP encapsulation
+                    Some(ref any) => match (any.downcast_ref::<EthernetPacket>(),
+                                            any.downcast_ref::<Ipv4Packet>(),
+                                            any.downcast_ref::<Ipv6Packet>()) {
 
-                    // IPv6 in IPv6 encapsulation
-                    Some(&Layer::Ipv6(ref e)) if e.next_header == IpProtocol::Ipv6 => Some(()),
+
+                        // Ethernet
+                        (Some(eth), _, _) => if eth.ethertype == EtherType::Ipv6 {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        // IPv6 in IPv4
+                        (_, Some(ipv4), _) => if ipv4.protocol == IpProtocol::Ipv6 {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        // IPv6 in IPv6
+                        (_, _, Some(ipv6)) => if ipv6.next_header == IpProtocol::Ipv6 {
+                            Some(())
+                        } else {
+                            None
+                        },
+
+                        _ => None,
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -45,7 +64,7 @@ impl Parser<PathIp> for Ipv6Parser {
             src: tuple!(be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16) >>
             dst: tuple!(be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16, be_u16) >>
 
-            (Layer::Ipv6(Ipv6Packet {
+            (Box::new(Ipv6Packet {
                 version: ver_tc_fl.0,
                 traffic_class: ver_tc_fl.1,
                 flow_label: ver_tc_fl.2,
@@ -59,9 +78,11 @@ impl Parser<PathIp> for Ipv6Parser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Ipv6(self.clone())
+impl fmt::Display for Ipv6Parser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "IPv6")
     }
 }
 

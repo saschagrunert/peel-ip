@@ -6,17 +6,12 @@ static IPV4_HEADER: &'static [u8] = &[0x45, 0x00, 0x01, 0xa5, 0xd6, 0x63, 0x40, 
                                       0xa8, 0x01, 0x0a, 0xad, 0xfc, 0x58, 0x44];
 
 #[test]
-fn ipv4_parser_variant() {
-    let parser = Ipv4Parser;
-    println!("{:?}", parser.variant());
-}
-
-#[test]
 fn parse_ipv4_success() {
     let mut parser = Ipv4Parser;
-    let res = parser.parse(IPV4_HEADER, None, None).unwrap().1;
-    println!("{}", res);
-    assert_eq!(Layer::Ipv4(Ipv4Packet {
+    println!("{}", parser);
+    let parsing_result = parser.parse(IPV4_HEADER, None, None).unwrap().1;
+    let res = parsing_result.downcast_ref();
+    assert_eq!(Some(&Ipv4Packet {
                    version: 4,
                    ihl: 20,
                    tos: 0,
@@ -50,9 +45,7 @@ fn parse_ipv4_failure_wrong_version() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input[0] = 0x55;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::TagBits, &input[..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -60,9 +53,7 @@ fn parse_ipv4_failure_wrong_ipprotocol() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input[9] = 0xff;
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res,
-               IResult::Error(Err::Position(ErrorKind::MapOpt, &input[9..])));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }
 
 #[test]
@@ -70,6 +61,5 @@ fn parse_ipv4_failure_too_small() {
     let mut parser = Ipv4Parser;
     let mut input = Vec::from(IPV4_HEADER);
     input.pop();
-    let res = parser.parse(&input, None, None);
-    assert_eq!(res, IResult::Incomplete(Needed::Size(20)));
+    assert!(parser.parse(&input, None, None).to_full_result().is_err());
 }

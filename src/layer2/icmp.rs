@@ -5,21 +5,26 @@ use prelude::*;
 /// The ICMP parser
 pub struct IcmpParser;
 
-impl Parser<PathIp> for IcmpParser {
-    type Result = Layer;
-    type Variant = ParserVariant;
-
+impl Parsable<PathIp> for IcmpParser {
     /// Parse an `IcmpPacket` from an `&[u8]`
     fn parse<'a>(&mut self,
                  input: &'a [u8],
-                 result: Option<&Vec<Self::Result>>,
+                 result: Option<&ParserResultVec>,
                  _: Option<&mut PathIp>)
-                 -> IResult<&'a [u8], Self::Result> {
+                 -> IResult<&'a [u8], ParserResult> {
         do_parse!(input,
             expr_opt!(match result {
                 Some(vector) => match vector.last() {
                     // ICMP on top of IPv4
-                    Some(&Layer::Ipv4(ref e)) if e.protocol == IpProtocol::Icmp => Some(()),
+                    Some(ref any) => if let Some(ipv4) = any.downcast_ref::<Ipv4Packet>() {
+                        if ipv4.protocol == IpProtocol::Icmp {
+                            Some(())
+                        } else {
+                            None
+                        }
+                    } else {
+                        None
+                    },
 
                     // Previous result found, but not correct parent
                     _ => None,
@@ -40,7 +45,7 @@ impl Parser<PathIp> for IcmpParser {
                         map!(IcmpEcho::parse, |x| IcmpData::Echo(x))) >>
 
             // Return the parsing result
-            (Layer::Icmp(IcmpPacket {
+            (Box::new(IcmpPacket {
                 message_type: message_type,
                 code: code,
                 checksum: checksum,
@@ -48,9 +53,11 @@ impl Parser<PathIp> for IcmpParser {
             }))
         )
     }
+}
 
-    fn variant(&self) -> Self::Variant {
-        ParserVariant::Icmp(self.clone())
+impl fmt::Display for IcmpParser {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "ICMP")
     }
 }
 
