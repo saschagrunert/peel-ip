@@ -1,7 +1,6 @@
 //! Transmission Control Protocol related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The TCP parser
 pub struct TcpParser;
 

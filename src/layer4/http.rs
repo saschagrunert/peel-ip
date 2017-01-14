@@ -1,7 +1,6 @@
 //! Hypertext Transfer Protocol related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The HTTP parser
 pub struct HttpParser;
 

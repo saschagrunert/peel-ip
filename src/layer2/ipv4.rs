@@ -1,7 +1,6 @@
 //! Internet Protocol version 4 related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The IPv4 parser
 pub struct Ipv4Parser;
 

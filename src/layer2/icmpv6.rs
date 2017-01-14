@@ -1,7 +1,6 @@
 //! Internet Control Message Protocol version 6 related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The `ICMPv6` parser
 pub struct Icmpv6Parser;
 

@@ -1,7 +1,6 @@
 //! User Datagram Protocol related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The UDP parser
 pub struct UdpParser;
 

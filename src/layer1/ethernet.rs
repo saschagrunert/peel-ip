@@ -1,7 +1,6 @@
 //! Ethernet related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The Ethernet parser
 pub struct EthernetParser;
 

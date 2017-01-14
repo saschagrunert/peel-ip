@@ -1,7 +1,6 @@
 //! Address Resolution Protocol related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The ARP parser
 pub struct ArpParser;
 

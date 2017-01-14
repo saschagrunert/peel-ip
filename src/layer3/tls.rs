@@ -1,7 +1,6 @@
 //! Transport layer security related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The TLS parser
 pub struct TlsParser;
 

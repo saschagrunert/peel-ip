@@ -1,7 +1,6 @@
 //! Internet Protocol version 6 related packet processing
 use prelude::*;
 
-#[derive(Debug, Clone)]
 /// The IPv6 parser
 pub struct Ipv6Parser;
 
