@@ -2,9 +2,9 @@
 //!
 //! ## Example usage
 //! ```
-//! use peel_ip::PeelIp;
+//! use peel_ip::prelude::*;
 //!
-//! let mut peel = PeelIp::new();
+//! let mut peel = PeelIp::default();
 //! let input = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0];
 //! let result = peel.traverse(&input, vec![]).unwrap();
 //! assert_eq!(result.len(), 1);
@@ -41,7 +41,10 @@ pub mod prelude {
     pub use path::{Path, Connection, Data, Identifier};
     pub use path::error::ErrorType as PathErrorType;
     pub use peel::prelude::*;
-    pub use super::PeelIp;
+    pub use super::NewPeelIp;
+
+    /// A shorthand for the TCP/IP based `Peel`
+    pub type PeelIp = Peel<PathIp>;
 
     /// A shorthand for the `IpProtocol` based `Path`
     pub type PathIp = Path<IpProtocol, ()>;
@@ -69,15 +72,10 @@ pub mod prelude {
     pub use layer4::ntp::*;
 }
 
-/// Peel for TCP/IP packets
-pub struct PeelIp {
-    /// Internal peel structure
-    pub peel: Peel<PathIp>,
-}
-
-impl PeelIp {
-    /// Creates a new `Peel` structure for TCP/IP based packet parsing
-    pub fn new() -> PeelIp {
+/// Trait for default parser tree generation
+pub trait NewPeelIp {
+    /// Get the default parser tree
+    fn default() -> PeelIp {
         // Create a tree
         let mut p = Peel::new();
 
@@ -105,26 +103,8 @@ impl PeelIp {
         // Create a path instance
         p.data = Some(Path::new());
 
-        PeelIp { peel: p }
-    }
-
-    /// Traverse the parser tree
-    pub fn traverse(&mut self, input: &[u8], result: ParserResultVec) -> PeelResult<ParserResultVec> {
-        self.peel.traverse(input, result)
-    }
-
-    /// Create a graphviz `graph.dot` file representation in the current directory
-    pub fn create_dot_file(&mut self) -> PeelResult<()> {
-        self.peel.create_dot_file()
-    }
-
-    /// Set the global log level for reporting
-    pub fn set_log_level(&mut self, level: LogLevel) {
-        self.peel.set_log_level(level)
-    }
-
-    /// Return the internal `PathIp`
-    pub fn path(&mut self) -> &mut PathIp {
-        self.peel.data.as_mut().unwrap()
+        p
     }
 }
+
+impl NewPeelIp for PeelIp {}
