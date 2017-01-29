@@ -36,7 +36,7 @@ static PACKET_ETH_IPV4_TCP_TLS: &'static [u8] =
 fn tree_parsing_eth_ipv4_tcp_tls(bencher: &mut Bencher) {
     let mut peel = PeelIp::new();
     bencher.iter(|| {
-        assert!(peel.traverse(PACKET_ETH_IPV4_TCP_TLS, vec![]).is_ok());
+        peel.traverse(PACKET_ETH_IPV4_TCP_TLS, vec![]);
     });
     bencher.bytes = PACKET_ETH_IPV4_TCP_TLS.len() as u64;
 }
