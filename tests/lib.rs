@@ -78,7 +78,7 @@ fn peel_success_dot() {
 fn peel_success_tcp() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).result;
     assert_eq!(result.len(), 3);
     assert_eq!(result[0].downcast_ref(),
                Some(&EthernetPacket {
@@ -131,7 +131,7 @@ fn peel_success_tls_http() {
     peel.set_log_level(LogLevel::Trace);
     let mut packet = Vec::from(PACKET_ETH_IPV4_TCP);
     packet.extend_from_slice(TLS_HEADER);
-    let result = peel.traverse(&packet, vec![]).unwrap();
+    let result = peel.traverse(&packet, vec![]).result;
     assert_eq!(result.len(), 5);
     assert_eq!(result[3].downcast_ref(),
                Some(&TlsPacket {
@@ -149,7 +149,7 @@ fn peel_success_tls_http() {
 fn peel_success_udp() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV6_UDP, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV6_UDP, vec![]).result;
     assert_eq!(result.len(), 3);
     assert_eq!(result[0].downcast_ref(),
                Some(&EthernetPacket {
@@ -186,7 +186,7 @@ fn peel_success_ntp() {
     peel.set_log_level(LogLevel::Trace);
     let mut packet = Vec::from(PACKET_ETH_IPV6_UDP);
     packet.extend_from_slice(NTP_HEADER);
-    let result = peel.traverse(&packet, vec![]).unwrap();
+    let result = peel.traverse(&packet, vec![]).result;
     assert_eq!(result.len(), 4);
     assert_eq!(result[3].downcast_ref(),
                Some(&NtpPacket {
@@ -211,7 +211,7 @@ fn peel_success_ntp() {
 fn peel_success_icmpv6() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV6_ICMP, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV6_ICMP, vec![]).result;
     assert_eq!(result.len(), 3);
 }
 
@@ -219,7 +219,7 @@ fn peel_success_icmpv6() {
 fn peel_success_ipv6_in_ipv4() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV4_IPV6, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV4_IPV6, vec![]).result;
     assert_eq!(result.len(), 3);
     assert_eq!(result[1].downcast_ref(),
                Some(&Ipv4Packet {
@@ -253,7 +253,7 @@ fn peel_success_ipv6_in_ipv4() {
 fn peel_success_ipv6_in_ipv6() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV6_IPV6, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV6_IPV6, vec![]).result;
     assert_eq!(result.len(), 3);
 }
 
@@ -261,7 +261,7 @@ fn peel_success_ipv6_in_ipv6() {
 fn peel_success_ipv4_in_ipv4() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let result = peel.traverse(PACKET_ETH_IPV4_IPV4, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV4_IPV4, vec![]).result;
     assert_eq!(result.len(), 3);
 }
 
@@ -271,7 +271,7 @@ fn peel_success_eth() {
     peel.set_log_level(LogLevel::Trace);
     let mut input = vec![0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00];
     input.extend_from_slice(&[0xff; 500]);
-    let result = peel.traverse(&input, vec![]).unwrap();
+    let result = peel.traverse(&input, vec![]).result;
     assert_eq!(result.len(), 1);
 }
 
@@ -279,7 +279,7 @@ fn peel_success_eth() {
 fn peel_failure_path_tracking() {
     let mut peel = PeelIp::default();
     peel.set_log_level(LogLevel::Trace);
-    let mut result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    let mut result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).result;
     result.swap(0, 1);
     assert!(track_connection(Some(peel.data.as_mut().unwrap()), Some(&result), 0, 0).is_ok());
     assert_eq!(peel.data.as_mut().unwrap().connection_count(), 1);
@@ -291,10 +291,10 @@ fn peel_track_timeout() {
     peel.set_log_level(LogLevel::Trace);
     peel.data.as_mut().unwrap().timeout = Duration::from_std(std::time::Duration::from_millis(1)).unwrap();
 
-    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).result;
     assert_eq!(result.len(), 3);
     std::thread::sleep(std::time::Duration::from_millis(10));
 
-    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).unwrap();
+    let result = peel.traverse(PACKET_ETH_IPV4_TCP, vec![]).result;
     assert_eq!(result.len(), 3);
 }

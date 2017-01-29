@@ -6,7 +6,7 @@
 //!
 //! let mut peel = PeelIp::default();
 //! let input = vec![0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0];
-//! let result = peel.traverse(&input, vec![]).unwrap();
+//! let result = peel.traverse(&input, vec![]).result;
 //! assert_eq!(result.len(), 1);
 //! ```
 #![deny(missing_docs)]
