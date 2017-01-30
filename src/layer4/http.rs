@@ -108,19 +108,19 @@ impl HttpRequest {
         ws!(do_parse!(
             // HTTP Request parsing
             method: alt!(
-                map!(tag_fast!("GET"), |_| HttpRequestMethod::Get) |
-                map!(tag_fast!("POST"), |_| HttpRequestMethod::Post) |
-                map!(tag_fast!("HEAD"), |_| HttpRequestMethod::Head) |
-                map!(tag_fast!("PUT"), |_| HttpRequestMethod::Put) |
-                map!(tag_fast!("DELETE"), |_| HttpRequestMethod::Delete) |
-                map!(tag_fast!("TRACE"), |_| HttpRequestMethod::Trace) |
-                map!(tag_fast!("OPTIONS"), |_| HttpRequestMethod::Options) |
-                map!(tag_fast!("CONNECT"), |_| HttpRequestMethod::Connect) |
-                map!(tag_fast!("PATCH"), |_| HttpRequestMethod::Patch)
+                map!(tag!("GET"), |_| HttpRequestMethod::Get) |
+                map!(tag!("POST"), |_| HttpRequestMethod::Post) |
+                map!(tag!("HEAD"), |_| HttpRequestMethod::Head) |
+                map!(tag!("PUT"), |_| HttpRequestMethod::Put) |
+                map!(tag!("DELETE"), |_| HttpRequestMethod::Delete) |
+                map!(tag!("TRACE"), |_| HttpRequestMethod::Trace) |
+                map!(tag!("OPTIONS"), |_| HttpRequestMethod::Options) |
+                map!(tag!("CONNECT"), |_| HttpRequestMethod::Connect) |
+                map!(tag!("PATCH"), |_| HttpRequestMethod::Patch)
             ) >>
 
             path: map_res!(take_until!(" "), str::from_utf8) >>
-            tag_fast!("HTTP/") >>
+            tag!("HTTP/") >>
             version: call!(HttpVersion::parse) >>
             headers: call!(HttpHeader::parse) >>
 
@@ -183,7 +183,7 @@ impl HttpVersion {
     named!(parse<&[u8], HttpVersion>,
         do_parse!(
             tuple: separated_pair!(map_res!(map_res!(digit, str::from_utf8), FromStr::from_str),
-                                   tag_fast!("."),
+                                   tag!("."),
                                    map_res!(map_res!(digit, str::from_utf8), FromStr::from_str)) >>
             (HttpVersion {
                 major: tuple.0,
@@ -215,9 +215,9 @@ impl HttpHeader {
         do_parse!(
             result: many_till!(map!(separated_pair!(
                 map_res!(ws!(take_until!(":")), str::from_utf8),
-                tag_fast!(": "),
+                tag!(": "),
                 map_res!(take_until!("\r"), str::from_utf8)), HttpHeader::from_tuple),
-                tag_fast!("\r\n\r\n")) >>
+                tag!("\r\n\r\n")) >>
             (result.0)
         )
     );
@@ -243,7 +243,7 @@ impl HttpResponse {
     named!(parse<&[u8], ParserResult>,
         ws!(do_parse!(
             // HTTP response parsing
-            tag_fast!("HTTP/") >>
+            tag!("HTTP/") >>
             version: call!(HttpVersion::parse) >>
             code: map_res!(map_res!(take_until!(" "), str::from_utf8), FromStr::from_str) >>
             reason: map_res!(take_until!("\r"), str::from_utf8) >>

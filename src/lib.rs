@@ -11,16 +11,10 @@
 //! ```
 #![deny(missing_docs)]
 
-#[macro_use]
 extern crate log;
-
-#[macro_use]
 extern crate nom;
 extern crate peel;
 extern crate path;
-
-#[macro_use]
-pub mod memcmp;
 
 pub mod layer1;
 pub mod layer2;

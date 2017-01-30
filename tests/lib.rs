@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate log;
 extern crate peel_ip;
 use peel_ip::prelude::*;
