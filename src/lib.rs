@@ -11,7 +11,10 @@
 //! ```
 #![deny(missing_docs)]
 
+#[macro_use]
 extern crate log;
+
+#[macro_use]
 extern crate nom;
 extern crate peel;
 extern crate path;
