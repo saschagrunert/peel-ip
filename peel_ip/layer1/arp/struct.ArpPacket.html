@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ArpPacket` struct in crate `peel_ip`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ArpPacket">
+
+    <title>peel_ip::layer1::arp::ArpPacket - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer1</a>::<wbr><a href='index.html'>arp</a></p><script>window.sidebarCurrent = {name: 'ArpPacket', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer1</a>::<wbr><a href='index.html'>arp</a>::<wbr><a class='struct' href=''>ArpPacket</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/peel_ip/layer1/arp.rs.html#69-99' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct ArpPacket {
+    pub hardware_type: <a class='enum' href='../../../peel_ip/layer1/arp/enum.ArpHardwareType.html' title='peel_ip::layer1::arp::ArpHardwareType'>ArpHardwareType</a>,
+    pub protocol_type: <a class='enum' href='../../../peel_ip/layer1/ethernet/enum.EtherType.html' title='peel_ip::layer1::ethernet::EtherType'>EtherType</a>,
+    pub hardware_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub protocol_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub operation: <a class='enum' href='../../../peel_ip/layer1/arp/enum.ArpOperation.html' title='peel_ip::layer1::arp::ArpOperation'>ArpOperation</a>,
+    pub sender_hardware_address: <a class='struct' href='../../../peel_ip/layer1/ethernet/struct.MacAddress.html' title='peel_ip::layer1::ethernet::MacAddress'>MacAddress</a>,
+    pub sender_protocol_address: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv4Addr.html' title='peel_ip::prelude::Ipv4Addr'>Ipv4Addr</a>,
+    pub target_hardware_address: <a class='struct' href='../../../peel_ip/layer1/ethernet/struct.MacAddress.html' title='peel_ip::layer1::ethernet::MacAddress'>MacAddress</a>,
+    pub target_protocol_address: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv4Addr.html' title='peel_ip::prelude::Ipv4Addr'>Ipv4Addr</a>,
+}</pre><div class='docblock'><p>Representation of the Arp structure</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.hardware_type' class='structfield'>
+                           <span id='hardware_type.v' class='invisible'>
+                           <code>hardware_type: <a class='enum' href='../../../peel_ip/layer1/arp/enum.ArpHardwareType.html' title='peel_ip::layer1::arp::ArpHardwareType'>ArpHardwareType</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>This field specifies the network protocol type. Example: Ethernet is 1.</p>
+</div><span id='structfield.protocol_type' class='structfield'>
+                           <span id='protocol_type.v' class='invisible'>
+                           <code>protocol_type: <a class='enum' href='../../../peel_ip/layer1/ethernet/enum.EtherType.html' title='peel_ip::layer1::ethernet::EtherType'>EtherType</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>This field specifies the internetwork protocol for which the ARP request is
+intended. For IPv4, this has the value 0x0800. The permitted PTYPE values share a numbering
+space with those for EtherType.</p>
+</div><span id='structfield.hardware_length' class='structfield'>
+                           <span id='hardware_length.v' class='invisible'>
+                           <code>hardware_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Length (in octets) of a hardware address. Ethernet addresses size is 6.</p>
+</div><span id='structfield.protocol_length' class='structfield'>
+                           <span id='protocol_length.v' class='invisible'>
+                           <code>protocol_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Length (in octets) of addresses used in the upper layer protocol. (The
+upper layer protocol specified in PTYPE.) IPv4 address size is 4.</p>
+</div><span id='structfield.operation' class='structfield'>
+                           <span id='operation.v' class='invisible'>
+                           <code>operation: <a class='enum' href='../../../peel_ip/layer1/arp/enum.ArpOperation.html' title='peel_ip::layer1::arp::ArpOperation'>ArpOperation</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies the operation that the sender is performing: 1 for request, 2 for reply.</p>
+</div><span id='structfield.sender_hardware_address' class='structfield'>
+                           <span id='sender_hardware_address.v' class='invisible'>
+                           <code>sender_hardware_address: <a class='struct' href='../../../peel_ip/layer1/ethernet/struct.MacAddress.html' title='peel_ip::layer1::ethernet::MacAddress'>MacAddress</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Media address of the sender.</p>
+</div><span id='structfield.sender_protocol_address' class='structfield'>
+                           <span id='sender_protocol_address.v' class='invisible'>
+                           <code>sender_protocol_address: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv4Addr.html' title='peel_ip::prelude::Ipv4Addr'>Ipv4Addr</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Internetwork address of the sender.</p>
+</div><span id='structfield.target_hardware_address' class='structfield'>
+                           <span id='target_hardware_address.v' class='invisible'>
+                           <code>target_hardware_address: <a class='struct' href='../../../peel_ip/layer1/ethernet/struct.MacAddress.html' title='peel_ip::layer1::ethernet::MacAddress'>MacAddress</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Media address of the intended receiver.</p>
+</div><span id='structfield.target_protocol_address' class='structfield'>
+                           <span id='target_protocol_address.v' class='invisible'>
+                           <code>target_protocol_address: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv4Addr.html' title='peel_ip::prelude::Ipv4Addr'>Ipv4Addr</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Target protocol address: Internetwork address of the intended receiver.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a> for <a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpPacket.html' title='peel_ip::layer1::arp::ArpPacket'>ArpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer1/arp.rs.html#67' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='../../../peel_ip/prelude/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='../../../peel_ip/prelude/fmt/type.Result.html' title='peel_ip::prelude::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpPacket.html' title='peel_ip::layer1::arp::ArpPacket'>ArpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer1/arp.rs.html#67' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpPacket.html' title='peel_ip::layer1::arp::ArpPacket'>ArpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer1/arp.rs.html#67' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpPacket.html' title='peel_ip::layer1::arp::ArpPacket'>ArpPacket</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpPacket.html' title='peel_ip::layer1::arp::ArpPacket'>ArpPacket</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "peel_ip";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

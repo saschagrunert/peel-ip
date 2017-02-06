@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Ipv6Packet` struct in crate `peel_ip`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Ipv6Packet">
+
+    <title>peel_ip::layer2::ipv6::Ipv6Packet - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer2</a>::<wbr><a href='index.html'>ipv6</a></p><script>window.sidebarCurrent = {name: 'Ipv6Packet', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer2</a>::<wbr><a href='index.html'>ipv6</a>::<wbr><a class='struct' href=''>Ipv6Packet</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/peel_ip/layer2/ipv6.rs.html#90-126' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Ipv6Packet {
+    pub version: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub traffic_class: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub flow_label: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub payload_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub next_header: <a class='enum' href='../../../peel_ip/layer2/ipv4/enum.IpProtocol.html' title='peel_ip::layer2::ipv4::IpProtocol'>IpProtocol</a>,
+    pub hop_limit: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub src: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv6Addr.html' title='peel_ip::prelude::Ipv6Addr'>Ipv6Addr</a>,
+    pub dst: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv6Addr.html' title='peel_ip::prelude::Ipv6Addr'>Ipv6Addr</a>,
+}</pre><div class='docblock'><p>Representation of an Internet Protocol version 6 packet</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.version' class='structfield'>
+                           <span id='version.v' class='invisible'>
+                           <code>version: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The constant 6 (bit sequence 0110).</p>
+</div><span id='structfield.traffic_class' class='structfield'>
+                           <span id='traffic_class.v' class='invisible'>
+                           <code>traffic_class: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The bits of this field hold two values. The 6 most-significant bits are used for
+differentiated services, which is used to classify packets. The remaining two bits are used
+for ECN; priority values subdivide into ranges: traffic where the source provides
+congestion control and non-congestion control traffic.</p>
+</div><span id='structfield.flow_label' class='structfield'>
+                           <span id='flow_label.v' class='invisible'>
+                           <code>flow_label: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Originally created for giving real-time applications special service. The flow label when
+set to a non-zero value now serves as a hint to routers and switches with multiple outbound
+paths that these packets should stay on the same path so that they will not be reordered.
+It has further been suggested that the flow label be used to help detect spoofed packets.</p>
+</div><span id='structfield.payload_length' class='structfield'>
+                           <span id='payload_length.v' class='invisible'>
+                           <code>payload_length: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The size of the payload in octets, including any extension headers. The length is set to
+zero when a Hop-by-Hop extension header carries a Jumbo Payload option.</p>
+</div><span id='structfield.next_header' class='structfield'>
+                           <span id='next_header.v' class='invisible'>
+                           <code>next_header: <a class='enum' href='../../../peel_ip/layer2/ipv4/enum.IpProtocol.html' title='peel_ip::layer2::ipv4::IpProtocol'>IpProtocol</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies the type of the next header. This field usually specifies the transport layer
+protocol used by a packet&#39;s payload. When extension headers are present in the packet this
+field indicates which extension header follows. The values are shared with those used for
+the IPv4 protocol field, as both fields have the same function.</p>
+</div><span id='structfield.hop_limit' class='structfield'>
+                           <span id='hop_limit.v' class='invisible'>
+                           <code>hop_limit: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Replaces the time to live field of IPv4. This value is decremented by one at each
+intermediate node visited by the packet. When the counter reaches 0 the packet is
+discarded.</p>
+</div><span id='structfield.src' class='structfield'>
+                           <span id='src.v' class='invisible'>
+                           <code>src: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv6Addr.html' title='peel_ip::prelude::Ipv6Addr'>Ipv6Addr</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Source address</p>
+</div><span id='structfield.dst' class='structfield'>
+                           <span id='dst.v' class='invisible'>
+                           <code>dst: <a class='struct' href='../../../peel_ip/prelude/struct.Ipv6Addr.html' title='peel_ip::prelude::Ipv6Addr'>Ipv6Addr</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Destination address</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a> for <a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Packet.html' title='peel_ip::layer2::ipv6::Ipv6Packet'>Ipv6Packet</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer2/ipv6.rs.html#88' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='../../../peel_ip/prelude/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='../../../peel_ip/prelude/fmt/type.Result.html' title='peel_ip::prelude::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Packet.html' title='peel_ip::layer2::ipv6::Ipv6Packet'>Ipv6Packet</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer2/ipv6.rs.html#88' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Packet.html' title='peel_ip::layer2::ipv6::Ipv6Packet'>Ipv6Packet</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer2/ipv6.rs.html#88' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Packet.html' title='peel_ip::layer2::ipv6::Ipv6Packet'>Ipv6Packet</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Packet.html' title='peel_ip::layer2::ipv6::Ipv6Packet'>Ipv6Packet</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "peel_ip";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

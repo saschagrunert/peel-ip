@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["NtpPacket","Representation of a Network Time Protocol packet"],["NtpParser","The UDP parser"]]});

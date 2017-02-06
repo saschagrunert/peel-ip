@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Display` trait in crate `peel_ip`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Display">
+
+    <title>peel_ip::prelude::fmt::Display - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>prelude</a>::<wbr><a href='index.html'>fmt</a></p><script>window.sidebarCurrent = {name: 'Display', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>prelude</a>::<wbr><a href='index.html'>fmt</a>::<wbr><a class='trait' href=''>Display</a></span><span class='out-of-band'><span class='since' title='Stable since Rust version 1.0.0'>1.0.0</span><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='https://doc.rust-lang.org/nightly/src/core/fmt/mod.rs.html#450-454' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait Display {
+    fn <a href='#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Error.html' title='peel_ip::prelude::fmt::Error'>Error</a>&gt;;
+}</pre><div class='docblock'><p>Format trait for an empty format, <code>{}</code>.</p>
+
+<p><code>Display</code> is similar to <a href="trait.Debug.html"><code>Debug</code></a>, but <code>Display</code> is for user-facing
+output, and so cannot be derived.</p>
+
+<p>For more information on formatters, see <a href="../../std/fmt/index.html">the module-level documentation</a>.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<p>Implementing <code>Display</code> on a type:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>fmt</span>;
+
+<span class='kw'>struct</span> <span class='ident'>Point</span> {
+    <span class='ident'>x</span>: <span class='ident'>i32</span>,
+    <span class='ident'>y</span>: <span class='ident'>i32</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>fmt</span>::<span class='ident'>Display</span> <span class='kw'>for</span> <span class='ident'>Point</span> {
+    <span class='kw'>fn</span> <span class='ident'>fmt</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>f</span>: <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>fmt</span>::<span class='ident'>Formatter</span>) <span class='op'>-&gt;</span> <span class='ident'>fmt</span>::<span class='prelude-ty'>Result</span> {
+        <span class='macro'>write</span><span class='macro'>!</span>(<span class='ident'>f</span>, <span class='string'>&quot;({}, {})&quot;</span>, <span class='self'>self</span>.<span class='ident'>x</span>, <span class='self'>self</span>.<span class='ident'>y</span>)
+    }
+}
+
+<span class='kw'>let</span> <span class='ident'>origin</span> <span class='op'>=</span> <span class='ident'>Point</span> { <span class='ident'>x</span>: <span class='number'>0</span>, <span class='ident'>y</span>: <span class='number'>0</span> };
+
+<span class='macro'>println</span><span class='macro'>!</span>(<span class='string'>&quot;The origin is: {}&quot;</span>, <span class='ident'>origin</span>);</pre>
+</div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.fmt' class='method stab '><span id='fmt.v' class='invisible'><code>fn <a href='#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Error.html' title='peel_ip::prelude::fmt::Error'>Error</a>&gt;</code></span></h3><div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><code>impl Display for <a class='struct' href='../../../peel_ip/layer1/ethernet/struct.EthernetParser.html' title='peel_ip::layer1::ethernet::EthernetParser'>EthernetParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer1/arp/struct.ArpParser.html' title='peel_ip::layer1::arp::ArpParser'>ArpParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer2/ipv4/struct.Ipv4Parser.html' title='peel_ip::layer2::ipv4::Ipv4Parser'>Ipv4Parser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer2/ipv6/struct.Ipv6Parser.html' title='peel_ip::layer2::ipv6::Ipv6Parser'>Ipv6Parser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer2/icmp/struct.IcmpParser.html' title='peel_ip::layer2::icmp::IcmpParser'>IcmpParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer2/icmpv6/struct.Icmpv6Parser.html' title='peel_ip::layer2::icmpv6::Icmpv6Parser'>Icmpv6Parser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpParser.html' title='peel_ip::layer3::tcp::TcpParser'>TcpParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer3/tls/struct.TlsParser.html' title='peel_ip::layer3::tls::TlsParser'>TlsParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer3/udp/struct.UdpParser.html' title='peel_ip::layer3::udp::UdpParser'>UdpParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer4/http/struct.HttpParser.html' title='peel_ip::layer4::http::HttpParser'>HttpParser</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpParser.html' title='peel_ip::layer4::ntp::NtpParser'>NtpParser</a></code></li>
+<li><code>impl Display for PathError</code></li>
+<li><code>impl&lt;'a, 'b, K, C&gt; Display for <a class='struct' href='../../../peel_ip/prelude/struct.Connection.html' title='peel_ip::prelude::Connection'>Connection</a>&lt;'a, 'b, K, C&gt; <span class='where'>where K: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a></span></code></li>
+<li><code>impl&lt;K&gt; Display for <a class='struct' href='../../../peel_ip/prelude/struct.Identifier.html' title='peel_ip::prelude::Identifier'>Identifier</a>&lt;K&gt; <span class='where'>where K: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a></span></code></li>
+<li><code>impl Display for PeelError</code></li>
+<li><code>impl Display for Parser1</code></li>
+<li><code>impl Display for Parser2</code></li>
+<li><code>impl Display for Parser3</code></li>
+<li><code>impl Display for Parser4</code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/boxed/struct.Box.html' title='alloc::boxed::Box'>Box</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/arc/struct.Arc.html' title='alloc::arc::Arc'>Arc</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/alloc/rc/struct.Rc.html' title='alloc::rc::Rc'>Rc</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/num/struct.Wrapping.html' title='core::num::Wrapping'>Wrapping</a>&lt;T&gt; <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a></span></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/num/dec2flt/struct.ParseFloatError.html' title='core::num::dec2flt::ParseFloatError'>ParseFloatError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/num/struct.TryFromIntError.html' title='core::num::TryFromIntError'>TryFromIntError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/num/struct.ParseIntError.html' title='core::num::ParseIntError'>ParseIntError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/cell/struct.BorrowError.html' title='core::cell::BorrowError'>BorrowError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/cell/struct.BorrowMutError.html' title='core::cell::BorrowMutError'>BorrowMutError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/core/char/struct.CharTryFromError.html' title='core::char::CharTryFromError'>CharTryFromError</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/prelude/str/struct.ParseBoolError.html' title='peel_ip::prelude::str::ParseBoolError'>ParseBoolError</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/prelude/str/struct.Utf8Error.html' title='peel_ip::prelude::str::Utf8Error'>Utf8Error</a></code></li>
+<li><code>impl&lt;'a&gt; Display for <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Arguments.html' title='peel_ip::prelude::fmt::Arguments'>Arguments</a>&lt;'a&gt;</code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Error.html' title='peel_ip::prelude::fmt::Error'>Error</a></code></li>
+<li><code>impl Display for !</code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.char.html'>char</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i16.html'>i16</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i64.html'>i64</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.isize.html'>isize</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></li>
+<li><code>impl&lt;'a, T&gt; Display for &amp;'a T <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></li>
+<li><code>impl&lt;'a, T&gt; Display for &amp;'a mut T <span class='where'>where T: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a></span></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f32.html'>f32</a></code></li>
+<li><code>impl Display for <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.f64.html'>f64</a></code></li>
+<li><code>impl&lt;'a&gt; Display for <a class='struct' href='https://doc.rust-lang.org/time/time/struct.TmFmt.html' title='time::TmFmt'>TmFmt</a>&lt;'a&gt;</code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/time/time/duration/struct.Duration.html' title='time::duration::Duration'>Duration</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/time/time/duration/struct.OutOfRangeError.html' title='time::duration::OutOfRangeError'>OutOfRangeError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/time/time/struct.SteadyTime.html' title='time::SteadyTime'>SteadyTime</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/time/time/enum.ParseError.html' title='time::ParseError'>ParseError</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://stebalien.github.io/doc/term/term/term/terminfo/enum.Error.html' title='term::terminfo::Error'>Error</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://stebalien.github.io/doc/term/term/term/terminfo/parm/enum.Error.html' title='term::terminfo::parm::Error'>Error</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://stebalien.github.io/doc/term/term/term/enum.Error.html' title='term::Error'>Error</a></code></li>
+<li><code>impl&lt;P, E&gt; Display for Err&lt;P, E&gt; <span class='where'>where E: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a>, P: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a></span></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std_unicode/char/struct.DecodeUtf16Error.html' title='std_unicode::char::DecodeUtf16Error'>DecodeUtf16Error</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/env/enum.VarError.html' title='std::env::VarError'>VarError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/env/struct.JoinPathsError.html' title='std::env::JoinPathsError'>JoinPathsError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.NulError.html' title='std::ffi::c_str::NulError'>NulError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/ffi/c_str/struct.IntoStringError.html' title='std::ffi::c_str::IntoStringError'>IntoStringError</a></code></li>
+<li><code>impl&lt;W&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/buffered/struct.IntoInnerError.html' title='std::io::buffered::IntoInnerError'>IntoInnerError</a>&lt;W&gt;</code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/io/error/struct.Error.html' title='std::io::error::Error'>Error</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/io/enum.CharsError.html' title='std::io::CharsError'>CharsError</a></code></li>
+<li><code>impl Display for <a class='enum' href='../../../peel_ip/prelude/enum.IpAddr.html' title='peel_ip::prelude::IpAddr'>IpAddr</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/prelude/struct.Ipv4Addr.html' title='peel_ip::prelude::Ipv4Addr'>Ipv4Addr</a></code></li>
+<li><code>impl Display for <a class='struct' href='../../../peel_ip/prelude/struct.Ipv6Addr.html' title='peel_ip::prelude::Ipv6Addr'>Ipv6Addr</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/net/addr/enum.SocketAddr.html' title='std::net::addr::SocketAddr'>SocketAddr</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/net/addr/struct.SocketAddrV4.html' title='std::net::addr::SocketAddrV4'>SocketAddrV4</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/net/addr/struct.SocketAddrV6.html' title='std::net::addr::SocketAddrV6'>SocketAddrV6</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/net/parser/struct.AddrParseError.html' title='std::net::parser::AddrParseError'>AddrParseError</a></code></li>
+<li><code>impl&lt;'a&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.Display.html' title='std::path::Display'>Display</a>&lt;'a&gt;</code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/path/struct.StripPrefixError.html' title='std::path::StripPrefixError'>StripPrefixError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/process/struct.ExitStatus.html' title='std::process::ExitStatus'>ExitStatus</a></code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/sync/mpsc/struct.SendError.html' title='std::sync::mpsc::SendError'>SendError</a>&lt;T&gt;</code></li>
+<li><code>impl&lt;T&gt; Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/sync/mpsc/enum.TrySendError.html' title='std::sync::mpsc::TrySendError'>TrySendError</a>&lt;T&gt;</code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/sync/mpsc/struct.RecvError.html' title='std::sync::mpsc::RecvError'>RecvError</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/sync/mpsc/enum.TryRecvError.html' title='std::sync::mpsc::TryRecvError'>TryRecvError</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/sync/mpsc/enum.RecvTimeoutError.html' title='std::sync::mpsc::RecvTimeoutError'>RecvTimeoutError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/time/struct.SystemTimeError.html' title='std::time::SystemTimeError'>SystemTimeError</a></code></li>
+<li><code>impl&lt;T&gt; Display for <a class='struct' href='https://doc.rust-lang.org/nightly/std/sys_common/poison/struct.PoisonError.html' title='std::sys_common::poison::PoisonError'>PoisonError</a>&lt;T&gt;</code></li>
+<li><code>impl&lt;T&gt; Display for <a class='enum' href='https://doc.rust-lang.org/nightly/std/sys_common/poison/enum.TryLockError.html' title='std::sys_common::poison::TryLockError'>TryLockError</a>&lt;T&gt;</code></li>
+<li><code>impl Display for LogError</code></li>
+<li><code>impl&lt;'a, G&gt; Display for <a class='struct' href='https://docs.rs/petgraph/0.4/petgraph/dot/struct.Dot.html' title='petgraph::dot::Dot'>Dot</a>&lt;'a, G&gt; <span class='where fmt-newline'>where G: <a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.IntoEdgeReferences.html' title='petgraph::visit::IntoEdgeReferences'>IntoEdgeReferences</a> + <a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.IntoNodeReferences.html' title='petgraph::visit::IntoNodeReferences'>IntoNodeReferences</a> + <a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.NodeIndexable.html' title='petgraph::visit::NodeIndexable'>NodeIndexable</a> + <a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.GraphProp.html' title='petgraph::visit::GraphProp'>GraphProp</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G::<a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.Data.html' title='petgraph::visit::Data'>EdgeWeight</a>: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;G::<a class='trait' href='https://docs.rs/petgraph/0.4/petgraph/visit/trait.Data.html' title='petgraph::visit::Data'>NodeWeight</a>: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a></span></code></li>
+<li><code>impl Display for <a class='enum' href='../../../peel_ip/prelude/enum.LogLevel.html' title='peel_ip::prelude::LogLevel'>LogLevel</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/log/log/enum.LogLevelFilter.html' title='log::LogLevelFilter'>LogLevelFilter</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/log/log/struct.SetLoggerError.html' title='log::SetLoggerError'>SetLoggerError</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/log/log/struct.ShutdownLoggerError.html' title='log::ShutdownLoggerError'>ShutdownLoggerError</a></code></li>
+<li><code>impl&lt;'a, B&gt; Display for <a class='enum' href='https://doc.rust-lang.org/nightly/collections/borrow/enum.Cow.html' title='collections::borrow::Cow'>Cow</a>&lt;'a, B&gt; <span class='where'>where B: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/collections/borrow/trait.ToOwned.html' title='collections::borrow::ToOwned'>ToOwned</a> + ?<a class='trait' href='https://doc.rust-lang.org/nightly/core/marker/trait.Sized.html' title='core::marker::Sized'>Sized</a>, B::<a class='trait' href='https://doc.rust-lang.org/nightly/collections/borrow/trait.ToOwned.html' title='collections::borrow::ToOwned'>Owned</a>: <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Display.html' title='peel_ip::prelude::fmt::Display'>Display</a></span></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.FromUtf8Error.html' title='collections::string::FromUtf8Error'>FromUtf8Error</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.FromUtf16Error.html' title='collections::string::FromUtf16Error'>FromUtf16Error</a></code></li>
+<li><code>impl Display for <a class='struct' href='https://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a></code></li>
+<li><code>impl Display for <a class='enum' href='https://doc.rust-lang.org/nightly/collections/string/enum.ParseError.html' title='collections::string::ParseError'>ParseError</a></code></li>
+</ul><script type="text/javascript" async
+                         src="../../../implementors/core/fmt/trait.Display.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "peel_ip";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

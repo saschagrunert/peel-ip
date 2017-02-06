@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `NtpPacket` struct in crate `peel_ip`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, NtpPacket">
+
+    <title>peel_ip::layer4::ntp::NtpPacket - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer4</a>::<wbr><a href='index.html'>ntp</a></p><script>window.sidebarCurrent = {name: 'NtpPacket', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer4</a>::<wbr><a href='index.html'>ntp</a>::<wbr><a class='struct' href=''>NtpPacket</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/peel_ip/layer4/ntp.rs.html#79-124' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct NtpPacket {
+    pub li: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub version: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub mode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub stratum: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub poll: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a>,
+    pub precision: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a>,
+    pub root_delay: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub root_dispersion: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub ref_id: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub ts_ref: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>,
+    pub ts_orig: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>,
+    pub ts_recv: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>,
+    pub ts_xmit: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a>,
+    pub auth: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a>&gt;,
+}</pre><div class='docblock'><p>Representation of a Network Time Protocol packet</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.li' class='structfield'>
+                           <span id='li.v' class='invisible'>
+                           <code>li: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Leap Indicator (2 Bit)
+This field is used to warn of an impending leap second</p>
+</div><span id='structfield.version' class='structfield'>
+                           <span id='version.v' class='invisible'>
+                           <code>version: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>NTP version number (3 Bit)</p>
+</div><span id='structfield.mode' class='structfield'>
+                           <span id='mode.v' class='invisible'>
+                           <code>mode: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Mode (3 Bit)</p>
+</div><span id='structfield.stratum' class='structfield'>
+                           <span id='stratum.v' class='invisible'>
+                           <code>stratum: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Stratum level of the local clock</p>
+</div><span id='structfield.poll' class='structfield'>
+                           <span id='poll.v' class='invisible'>
+                           <code>poll: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The maximum interval between messages in seconds to the nearest power of two</p>
+</div><span id='structfield.precision' class='structfield'>
+                           <span id='precision.v' class='invisible'>
+                           <code>precision: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i8.html'>i8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Precision of the local clock in seconds to the nearest power of two</p>
+</div><span id='structfield.root_delay' class='structfield'>
+                           <span id='root_delay.v' class='invisible'>
+                           <code>root_delay: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The total round trip delay to the primary reference source, in seconds with the fraction
+point between bits 15 and 16. Positive and negative values are valid</p>
+</div><span id='structfield.root_dispersion' class='structfield'>
+                           <span id='root_dispersion.v' class='invisible'>
+                           <code>root_dispersion: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The maximum error relative to the primary reference source in seconds with the fraction
+point between bits 15 and 16. Only positive values greater than zero are valid</p>
+</div><span id='structfield.ref_id' class='structfield'>
+                           <span id='ref_id.v' class='invisible'>
+                           <code>ref_id: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Reference clock identifier. Used to identify the particular reference clock.</p>
+</div><span id='structfield.ts_ref' class='structfield'>
+                           <span id='ts_ref.v' class='invisible'>
+                           <code>ts_ref: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Reference timestamp. The local time at which the local clock was last set or corrected.</p>
+</div><span id='structfield.ts_orig' class='structfield'>
+                           <span id='ts_orig.v' class='invisible'>
+                           <code>ts_orig: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Originate timestamp. The local time when the client sent the request.</p>
+</div><span id='structfield.ts_recv' class='structfield'>
+                           <span id='ts_recv.v' class='invisible'>
+                           <code>ts_recv: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Receive timestamp. The local time when the request was received by the server.</p>
+</div><span id='structfield.ts_xmit' class='structfield'>
+                           <span id='ts_xmit.v' class='invisible'>
+                           <code>ts_xmit: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u64.html'>u64</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Transmit timestamp. The local time when the reply was sent from the server.</p>
+</div><span id='structfield.auth' class='structfield'>
+                           <span id='auth.v' class='invisible'>
+                           <code>auth: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>(</a><a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>, <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.tuple.html'>)</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Authenticator. (0 or 96 Bit) See section 7.5 of [RFC5905] and [RFC7822]</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a> for <a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpPacket.html' title='peel_ip::layer4::ntp::NtpPacket'>NtpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer4/ntp.rs.html#77' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='../../../peel_ip/prelude/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='../../../peel_ip/prelude/fmt/type.Result.html' title='peel_ip::prelude::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpPacket.html' title='peel_ip::layer4::ntp::NtpPacket'>NtpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer4/ntp.rs.html#77' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpPacket.html' title='peel_ip::layer4::ntp::NtpPacket'>NtpPacket</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer4/ntp.rs.html#77' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpPacket.html' title='peel_ip::layer4::ntp::NtpPacket'>NtpPacket</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer4/ntp/struct.NtpPacket.html' title='peel_ip::layer4::ntp::NtpPacket'>NtpPacket</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "peel_ip";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

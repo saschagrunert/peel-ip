@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["IpProtocol","Current supported IPv4 protocols"]],"struct":[["Ipv4Packet","Representation of an Internet Protocol version 4 packet"],["Ipv4Parser","The IPv4 parser"]]});

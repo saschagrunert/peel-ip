@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["TlsRecordContentType","TLS record protocol content type"]],"struct":[["TlsPacket","Representation of a Transport layer security packet"],["TlsParser","The TLS parser"],["TlsRecordVersion","TLS record protocol version"]]});

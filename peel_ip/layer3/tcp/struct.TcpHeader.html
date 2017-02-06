@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `TcpHeader` struct in crate `peel_ip`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, TcpHeader">
+
+    <title>peel_ip::layer3::tcp::TcpHeader - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer3</a>::<wbr><a href='index.html'>tcp</a></p><script>window.sidebarCurrent = {name: 'TcpHeader', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../../index.html'>peel_ip</a>::<wbr><a href='../index.html'>layer3</a>::<wbr><a href='index.html'>tcp</a>::<wbr><a class='struct' href=''>TcpHeader</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../../src/peel_ip/layer3/tcp.rs.html#109-173' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct TcpHeader {
+    pub source_port: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub dest_port: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub sequence_no: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub ack_no: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a>,
+    pub data_offset: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub reserved: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>,
+    pub flag_urg: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub flag_ack: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub flag_psh: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub flag_rst: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub flag_syn: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub flag_fin: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>,
+    pub window: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub checksum: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub urgent_pointer: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a>,
+    pub options: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;,
+}</pre><div class='docblock'><p>Representation of a Transmission Control Protocol packet header</p>
+</div><h2 class='fields'>Fields</h2><span id='structfield.source_port' class='structfield'>
+                           <span id='source_port.v' class='invisible'>
+                           <code>source_port: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Identifies the sending port</p>
+</div><span id='structfield.dest_port' class='structfield'>
+                           <span id='dest_port.v' class='invisible'>
+                           <code>dest_port: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Identifies the receiving port</p>
+</div><span id='structfield.sequence_no' class='structfield'>
+                           <span id='sequence_no.v' class='invisible'>
+                           <code>sequence_no: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>If the SYN flag is set (1), then this is the initial sequence number. The sequence number
+of the actual first data byte and the acknowledged number in the corresponding ACK are then
+this sequence number plus 1.
+If the SYN flag is clear (0), then this is the accumulated sequence number of the first
+data byte of this segment for the current session.</p>
+</div><span id='structfield.ack_no' class='structfield'>
+                           <span id='ack_no.v' class='invisible'>
+                           <code>ack_no: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u32.html'>u32</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>If the ACK flag is set then the value of this field is the next sequence number that the
+sender is expecting. This acknowledges receipt of all prior bytes (if any). The first ACK
+sent by each end acknowledges the other end&#39;s initial sequence number itself, but no data.</p>
+</div><span id='structfield.data_offset' class='structfield'>
+                           <span id='data_offset.v' class='invisible'>
+                           <code>data_offset: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Specifies the size of the TCP header in 32-bit words. The minimum size header is 5 words
+and the maximum is 15 words thus giving the minimum size of 20 bytes and maximum of 60
+bytes, allowing for up to 40 bytes of options in the header. This field gets its name from
+the fact that it is also the offset from the start of the TCP segment to the actual data.</p>
+</div><span id='structfield.reserved' class='structfield'>
+                           <span id='reserved.v' class='invisible'>
+                           <code>reserved: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Kor future use and should be set to zero</p>
+</div><span id='structfield.flag_urg' class='structfield'>
+                           <span id='flag_urg.v' class='invisible'>
+                           <code>flag_urg: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Indicates that the Urgent pointer field is significant</p>
+</div><span id='structfield.flag_ack' class='structfield'>
+                           <span id='flag_ack.v' class='invisible'>
+                           <code>flag_ack: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Indicates that the Acknowledgment field is significant. All packets after the initial SYN
+packet sent by the client should have this flag set.</p>
+</div><span id='structfield.flag_psh' class='structfield'>
+                           <span id='flag_psh.v' class='invisible'>
+                           <code>flag_psh: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Push function. Asks to push the buffered data to the receiving application.</p>
+</div><span id='structfield.flag_rst' class='structfield'>
+                           <span id='flag_rst.v' class='invisible'>
+                           <code>flag_rst: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Reset the connection</p>
+</div><span id='structfield.flag_syn' class='structfield'>
+                           <span id='flag_syn.v' class='invisible'>
+                           <code>flag_syn: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>Synchronize sequence numbers. Only the first packet sent from each end should have this
+flag set. Some other flags and fields change meaning based on this flag, and some are only
+valid for when it is set, and others when it is clear.</p>
+</div><span id='structfield.flag_fin' class='structfield'>
+                           <span id='flag_fin.v' class='invisible'>
+                           <code>flag_fin: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>No more data from sender</p>
+</div><span id='structfield.window' class='structfield'>
+                           <span id='window.v' class='invisible'>
+                           <code>window: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The size of the receive window, which specifies the number of window size units (by
+default, bytes) (beyond the segment identified by the sequence number in the acknowledgment
+field) that the sender of this segment is currently willing to receive (see Flow control
+and Window Scaling)</p>
+</div><span id='structfield.checksum' class='structfield'>
+                           <span id='checksum.v' class='invisible'>
+                           <code>checksum: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The 16-bit checksum field is used for error-checking of the header and data</p>
+</div><span id='structfield.urgent_pointer' class='structfield'>
+                           <span id='urgent_pointer.v' class='invisible'>
+                           <code>urgent_pointer: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u16.html'>u16</a></code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>If the URG flag is set, then this 16-bit field is an offset from the sequence number
+indicating the last urgent data byte</p>
+</div><span id='structfield.options' class='structfield'>
+                           <span id='options.v' class='invisible'>
+                           <code>options: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;</code>
+                           </span></span><span class='stab '></span><div class='docblock'><p>The length of this field is determined by the data offset field.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../../../peel_ip/prelude/fmt/trait.Debug.html' title='peel_ip::prelude::fmt::Debug'>Debug</a> for <a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpHeader.html' title='peel_ip::layer3::tcp::TcpHeader'>TcpHeader</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer3/tcp.rs.html#107' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='../../../peel_ip/prelude/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='../../../peel_ip/prelude/fmt/struct.Formatter.html' title='peel_ip::prelude::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='../../../peel_ip/prelude/fmt/type.Result.html' title='peel_ip::prelude::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpHeader.html' title='peel_ip::layer3::tcp::TcpHeader'>TcpHeader</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer3/tcp.rs.html#107' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpHeader.html' title='peel_ip::layer3::tcp::TcpHeader'>TcpHeader</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../../src/peel_ip/layer3/tcp.rs.html#107' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpHeader.html' title='peel_ip::layer3::tcp::TcpHeader'>TcpHeader</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../../../peel_ip/layer3/tcp/struct.TcpHeader.html' title='peel_ip::layer3::tcp::TcpHeader'>TcpHeader</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../../";
+        window.currentCrate = "peel_ip";
+    </script>
+    <script src="../../../jquery.js"></script>
+    <script src="../../../main.js"></script>
+    <script defer src="../../../search-index.js"></script>
+</body>
+</html>

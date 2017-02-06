@@ -1,0 +1,1 @@
+initSidebarItems({"struct":[["Ipv6Packet","Representation of an Internet Protocol version 6 packet"],["Ipv6Parser","The IPv6 parser"]]});
