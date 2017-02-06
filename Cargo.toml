@@ -10,7 +10,6 @@ homepage = "https://github.com/saschagrunert/peel-ip"
 documentation = "https://docs.rs/peel-ip"
 description = "Packet parsing for the Internet Protocol Suite"
 categories = ["parsing"]
-license-file = "LICENSE"
 
 [badges]
 travis-ci = { repository = "saschagrunert/peel-ip", branch = "master" }
